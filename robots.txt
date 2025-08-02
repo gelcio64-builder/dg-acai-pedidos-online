@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gelcio64-builder.github.io/dg-acai-pedidos/sitemap.xml 

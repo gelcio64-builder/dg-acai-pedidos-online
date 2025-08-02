@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D&G Acai</title>
+  <style>
+    body {
+      background-color: #800080;
+      color: white;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    h1, h2 {
+      text-align: center;
+    }
+    .produto, .complementos, .extras {
+      background-color: #9932CC;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 10px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .checkbox-group label {
+      width: 150px;
+      margin: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Bem-vindo ao Pedido DG Açaí 🍧</h1>
+
+  <div class="produto">
+    <h2>Escolha seu produto</h2>
+    <label><input type="radio" name="produto" value="Açaí 500ml - R$12"> Açaí 500ml - R$12</label>
+    <label><input type="radio" name="produto" value="Açaí 700ml - R$15"> Açaí 700ml - R$15</label>
+    <label><input type="radio" name="produto" value="Marmita Açaí - R$22"> Marmita Açaí - R$22</label>
+    <label><input type="radio" name="produto" value="Balde 2kg - R$35"> Balde 2kg - R$35</label>
+    <label><input type="radio" name="produto" value="Barca de Açaí - R$27"> Barca de Açaí - R$27</label>
+    <label><input type="radio" name="produto" value="Roleta Açaí - R$40"> Roleta Açaí - R$40</label>
+  </div>
+
+  <div class="complementos">
+    <h2>Complementos Inclusos (Gratuitos)</h2>
+    <p>Selecione os complementos que deseja manter:</p>
+    <div class="checkbox-group">
+      <label><input type="checkbox" name="incluso" value="Leite Ninho" checked> Leite Ninho</label>
+      <label><input type="checkbox" name="incluso" value="Leite Condensado" checked> Leite Condensado</label>
+      <label><input type="checkbox" name="incluso" value="Paçoca" checked> Paçoca</label>
+      <label><input type="checkbox" name="incluso" value="Granola" checked> Granola</label>
+      <label><input type="checkbox" name="incluso" value="Amendoim" checked> Amendoim</label>
+      <label><input type="checkbox" name="incluso" value="Banana" checked> Banana</label>
+      <label><input type="checkbox" name="incluso" value="Uva" checked> Uva</label>
+      <label><input type="checkbox" name="incluso" value="Morango" checked> Morango</label>
+    </div>
+  </div>
+
+  <div class="extras">
+    <h2>Deseja algum complemento em dobro? (+R$1,50 cada)</h2>
+    <div class="checkbox-group">
+      <label><input type="checkbox" name="extra" value="Leite Ninho"> Leite Ninho</label>
+      <label><input type="checkbox" name="extra" value="Leite Condensado"> Leite Condensado</label>
+      <label><input type="checkbox" name="extra" value="Paçoca"> Paçoca</label>
+      <label><input type="checkbox" name="extra" value="Granola"> Granola</label>
+      <label><input type="checkbox" name="extra" value="Amendoim"> Amendoim</label>
+      <label><input type="checkbox" name="extra" value="Banana"> Banana</label>
+      <label><input type="checkbox" name="extra" value="Uva"> Uva</label>
+      <label><input type="checkbox" name="extra" value="Morango"> Morango</label>
+    </div>
+  </div>
+
+  <h2>Obrigado por escolher o D&G Açaí! 🍓</h2>
+</body>
+
+</html> 
