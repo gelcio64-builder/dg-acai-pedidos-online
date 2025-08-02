@@ -3,180 +3,794 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DG Açaí - Pedidos Online | Açaí Delivery | WhatsApp</title>
+    <title>DG Açaí - Sistema de Pedidos Online</title>
     
     <!-- SEO Meta Tags -->
-    <meta name="description" content="DG Açaí - Faça seus pedidos online! Açaí delivery via WhatsApp. Pequeno, médio e grande. Complementos: leite em pó, granola, banana, morango, paçoca, nutella. Frete grátis.">
-    <meta name="keywords" content="açaí, delivery, pedidos online, WhatsApp, complementos, leite em pó, granola, banana, morango, paçoca, nutella, frete grátis">
+    <meta name="description" content="DG Açaí - Faça seus pedidos online! Sistema moderno de pedidos de açaí com complementos deliciosos. Delivery via WhatsApp.">
+    <meta name="keywords" content="açaí, delivery, pedidos online, WhatsApp, complementos, leite ninho, granola, banana, morango, paçoca, nutella">
     <meta name="author" content="DG Açaí">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gelcio64-builder.github.io/dg-acai-pedidos/">
-    <meta property="og:title" content="DG Açaí - Pedidos Online">
-    <meta property="og:description" content="Faça seus pedidos de açaí online! Delivery via WhatsApp com complementos deliciosos.">
-    <meta property="og:image" content="https://gelcio64-builder.github.io/dg-acai-pedidos/acai-logo.jpg">
+    <meta property="og:title" content="DG Açaí - Sistema de Pedidos Online">
+    <meta property="og:description" content="Faça seus pedidos de açaí online! Sistema moderno com complementos deliciosos.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/8000BF/FFFFFF?text=DG+Açaí">
     
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gelcio64-builder.github.io/dg-acai-pedidos/">
-    <meta property="twitter:title" content="DG Açaí - Pedidos Online">
-    <meta property="twitter:description" content="Faça seus pedidos de açaí online! Delivery via WhatsApp com complementos deliciosos.">
-    <meta property="twitter:image" content="https://gelcio64-builder.github.io/dg-acai-pedidos/acai-logo.jpg">
-    
-    <!-- Local Business Schema -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FoodEstablishment",
-      "name": "DG Açaí",
-      "description": "Açaí delivery via WhatsApp com complementos deliciosos",
-      "url": "https://gelcio64-builder.github.io/dg-acai-pedidos/",
-      "telephone": "+55-XX-XXXX-XXXX",
-      "address": {
-        "@type": "PostalAddress",
-        "addressLocality": "Sua Cidade",
-        "addressRegion": "Seu Estado",
-        "addressCountry": "BR"
-      },
-      "servesCuisine": "Açaí",
-      "priceRange": "$$",
-      "openingHours": "Mo-Su 10:00-22:00"
-    }
-    </script>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #820AD1, #9B30FF);
-            color: white;
+        * {
             margin: 0;
-            padding: 20px;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8000BF, #9B30FF);
+            color: white;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            line-height: 1.6;
         }
 
         .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
             text-align: center;
-            max-width: 600px;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            padding: 40px 30px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            color: #333;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%238000BF;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%239B30FF;stop-opacity:0.05" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23grad1)"/><circle cx="1000" cy="80" r="60" fill="%23FFD700" opacity="0.3"/><circle cx="150" cy="320" r="40" fill="%238000BF" opacity="0.2"/><path d="M 200 100 Q 300 50 400 100 T 600 100" stroke="%23FFD700" stroke-width="3" fill="none" opacity="0.4"/></svg>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+            z-index: -1;
+        }
+
+        .header h1 {
+            color: #8000BF;
+            font-size: 3.2em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            display: block;
+            border-radius: 50%;
+            box-shadow: 0 12px 35px rgba(128, 0, 191, 0.3);
+            background: linear-gradient(135deg, #FFD700, #FFED4E);
+            padding: 8px;
+            border: 4px solid white;
+            position: relative;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8000BF, #9B30FF, #FFD700);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8000BF, #9B30FF);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(128, 0, 191, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #9B30FF, #8000BF);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(128, 0, 191, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-add {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-add:hover {
+            background: #128C7E;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-generate {
+            background: #FF6B35;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-generate:hover {
+            background: #E55A2B;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3742;
+        }
+
+        .btn-success {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #128C7E;
+        }
+
+        .pedido-card {
             background: rgba(255, 255, 255, 0.1);
-            padding: 40px;
             border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
             backdrop-filter: blur(10px);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
         }
 
-        h1 {
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .pedido-header h3 {
             color: #FFD700;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            font-size: 1.5em;
         }
 
-        .logo {
-            font-size: 4em;
-            margin-bottom: 20px;
+        .form-group {
+            margin-bottom: 25px;
         }
 
-        .description {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-            line-height: 1.6;
-        }
-
-        .btn {
-            background: #FFD700;
-            color: #820AD1;
-            padding: 15px 30px;
-            text-decoration: none;
-            border-radius: 50px;
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
             font-weight: bold;
-            font-size: 1.1em;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin: 10px;
-            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
-        }
-
-        .btn:hover {
-            background: #FFED4E;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255, 215, 0, 0.4);
-        }
-
-        .features {
-            margin-top: 30px;
-            text-align: left;
-        }
-
-        .features h3 {
             color: #FFD700;
-            margin-bottom: 15px;
+            font-size: 1.1em;
         }
 
-        .features ul {
-            list-style: none;
-            padding: 0;
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
         }
 
-        .features li {
-            margin: 8px 0;
-            padding-left: 20px;
+        .form-group input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .produto-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 3px solid transparent;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
             position: relative;
         }
 
-        .features li:before {
-            content: "🍇";
-            position: absolute;
-            left: 0;
+        .produto-option:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .produto-option.selected {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.2);
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        .produto-option input[type="radio"] {
+            display: none;
+        }
+
+        .produto-nome {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+
+        .produto-preco {
+            color: #FFD700;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .complementos-section, .extras-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .complementos-section h4, .extras-section h4 {
+            color: #00FF00;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .complementos-section p {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .complemento-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .complemento-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .complemento-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .complemento-item label:first-child {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .complemento-item label:last-child {
+            color: #FF6B6B;
+            font-size: 0.9em;
+        }
+
+        .complemento-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #00FF00;
+            cursor: pointer;
+        }
+
+        .complemento-item input[type="checkbox"].dobro {
+            accent-color: #FF6B6B;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .extras-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .extras-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .extras-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #FFD700;
+            cursor: pointer;
+        }
+
+        .extras-item label {
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        #resumo-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        #resumo-section h3 {
+            color: #FFD700;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        #total-destaque {
+            background: #FFD700;
+            color: #8000BF;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        #resumo-content {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            white-space: pre-line;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
         }
 
         .footer {
+            text-align: center;
             margin-top: 40px;
-            font-size: 0.9em;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer p {
+            margin: 5px 0;
             opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .complementos-grid, .extras-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
+            .pedido-card {
+                padding: 20px;
+            }
+            
+            #total-destaque {
+                font-size: 1.5em;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .complementos-grid, .extras-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="logo">🍇</div>
-        <h1>DG Açaí</h1>
-        <p class="description">
-            Sistema moderno de pedidos de açaí<br>
-            Faça seus pedidos de forma rápida e fácil!
-        </p>
-        
-        <a href="acai-pedidos.html" class="btn">🍽️ Fazer Pedido</a>
-        
-        <div class="features">
-            <h3>✨ Funcionalidades:</h3>
-            <ul>
-                <li>Pedidos familiares com múltiplos açaís</li>
-                <li>Cálculo automático de preços</li>
-                <li>9 complementos disponíveis</li>
-                <li>Formatação automática para WhatsApp</li>
-                <li>Interface otimizada para celular</li>
-                <li>Frete incluído no cálculo</li>
-            </ul>
+        <div class="header">
+            <div class="logo">
+                <img src="dg-acai-logo.png.png" alt="DG Açaí Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='🍇';">
+            </div>
+            <h1>D&G Açaí Berry</h1>
+            <p>Faça Seu Pedido Online</p>
+            <p>Sistema Moderno de Pedidos • Delivery via WhatsApp</p>
+            
+            <div class="controls">
+                <button class="btn" onclick="adicionarPedido()">➕ Adicionar Pedido</button>
+                <button class="btn" onclick="gerarPedidoFinal()">📋 Gerar Pedido Final</button>
+            </div>
         </div>
-        
+
+        <div id="pedidos-container">
+            <!-- Os pedidos serão adicionados aqui dinamicamente -->
+        </div>
+
+        <div id="resumo-section">
+            <h3>📋 Resumo do Pedido</h3>
+            <div id="total-destaque">TOTAL: R$ 0,00</div>
+            <div id="resumo-content"></div>
+            <div style="text-align: center;">
+                <a id="whatsapp-link" href="#" class="whatsapp-btn" target="_blank">
+                    📱 Enviar para WhatsApp
+                </a>
+            </div>
+        </div>
+
         <div class="footer">
             <p>📱 Acesse pelo celular para melhor experiência</p>
-            <p>💬 Pedidos via WhatsApp</p>
+            <p>💬 Pedidos via WhatsApp - DG Açaí</p>
+            <p><img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px; border-radius: 50%;"> Sistema de Pedidos Online</p>
         </div>
     </div>
 
     <script>
-        // Redirecionamento automático após 5 segundos
-        setTimeout(function() {
-            if (confirm('Deseja ir direto para o sistema de pedidos?')) {
-                window.location.href = 'acai-pedidos.html';
+        let contador = 0;
+        const produtos = [
+            { nome: "Copo 500ml", preco: 12 },
+            { nome: "Copo 700ml", preco: 15 },
+            { nome: "Marmita Açaí", preco: 22 },
+            { nome: "Barca Açaí", preco: 27 },
+            { nome: "Balde 2kg", preco: 35 },
+            { nome: "Roleta Açaí", preco: 40 }
+        ];
+
+        const complementosInclusos = [
+            "Leite Ninho", "Leite Condensado", "Paçoca", "Granola",
+            "Amendoim", "Banana", "Uva", "Morango"
+        ];
+
+        const extras = ["Nutella", "Creme de Ninho"];
+
+        function adicionarPedido() {
+            contador++;
+            const pedidoDiv = document.createElement("div");
+            pedidoDiv.className = "pedido-card";
+            pedidoDiv.id = `pedido-${contador}`;
+
+            let produtosHTML = produtos.map(produto => `
+                <div class="produto-option" onclick="selecionarProduto(this, ${contador})">
+                    <input type="radio" name="produto-${contador}" value="${produto.nome}" data-preco="${produto.preco}">
+                    <div class="produto-nome">${produto.nome}</div>
+                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            let complementosHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <label>
+                        <input type="checkbox" class="incluso" id="comp-${contador}-${comp}" data-nome="${comp}">
+                        ${comp}
+                    </label>
+                    <label>
+                        <input type="checkbox" class="dobro" id="dobro-${contador}-${comp}" data-nome="${comp}">
+                        Em dobro (+R$1,50)
+                    </label>
+                </div>
+            `).join('');
+
+            let extrasHTML = extras.map(extra => `
+                <div class="extras-item">
+                    <input type="checkbox" id="extra-${contador}-${extra}">
+                    <label for="extra-${contador}-${extra}">${extra}</label>
+                </div>
+            `).join('');
+
+            pedidoDiv.innerHTML = `
+                <div class="pedido-header">
+                    <h3><img src="dg-acai-logo.png.png" alt="DG Açaí" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${contador}</h3>
+                    <button class="btn btn-danger" onclick="removerPedido(${contador})">❌ Remover</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>👤 Nome do Cliente *</label>
+                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome completo" required>
+                </div>
+
+                <div class="form-group">
+                    <label>🍇 Escolha seu Produto *</label>
+                    <div class="produtos-grid">
+                        ${produtosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section">
+                    <h4>✅ Complementos Disponíveis</h4>
+                    <p>Marque os complementos que deseja incluir no seu açaí. Para pedir em dobro, marque a opção extra (+R$1,50).</p>
+                    ${complementosHTML}
+                </div>
+
+                <div class="extras-section">
+                    <h4>🍫 Extras Especiais (+R$1,50 cada)</h4>
+                    <div class="extras-grid">
+                        ${extrasHTML}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px solid rgba(255, 215, 0, 0.3);">
+                    <button class="btn btn-add" onclick="adicionarPedido()">
+                        ➕ Adicionar Próximo Pedido
+                    </button>
+                    <button class="btn btn-generate" onclick="gerarPedidoFinal()">
+                        📋 Gerar Pedido Final
+                    </button>
+                </div>
+            `;
+
+            document.getElementById("pedidos-container").appendChild(pedidoDiv);
+        }
+
+        function selecionarProduto(elemento, pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.querySelectorAll('.produto-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('input[type="radio"]').checked = false;
+            });
+
+            elemento.classList.add('selected');
+            elemento.querySelector('input[type="radio"]').checked = true;
+        }
+
+        function removerPedido(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.remove();
+        }
+
+        function gerarPedidoFinal() {
+            if (contador === 0) {
+                alert("Adicione pelo menos um pedido!");
+                return;
             }
-        }, 5000);
+
+            let resumo = "D&G AÇAÍ BERRY\n\n";
+            let totalGeral = 0;
+
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                
+                if (!produtoSelecionado) {
+                    alert(`Por favor, selecione um produto para o pedido ${i}`);
+                    return;
+                }
+
+                const produtoNome = produtoSelecionado.value;
+                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
+
+                const complementosInclusos = [];
+                pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
+                    complementosInclusos.push(cb.dataset.nome);
+                });
+
+                const complementosDobro = [];
+                pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
+                    complementosDobro.push(cb.dataset.nome);
+                });
+
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobro.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = produtoPreco + valorDobro + valorExtras;
+                totalGeral += subtotal;
+
+                resumo += `<span style="font-weight: bold; font-size: 1.1em; margin-left: 10px;">${nome.toUpperCase()}</span>\n`;
+                resumo += `   <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 5px;"> ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                
+                if (complementosInclusos.length > 0) {
+                    resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
+                }
+                
+                if (complementosDobro.length > 0) {
+                    resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                }
+                
+                if (extras.length > 0) {
+                    resumo += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumo += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+
+            // Verificar se há produtos que precisam de frete (não são baldes)
+            let temProdutoComFrete = false;
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (pedidoElement) {
+                    const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                    if (produtoSelecionado) {
+                        const produtoNome = produtoSelecionado.value;
+                        if (!produtoNome.toLowerCase().includes('balde')) {
+                            temProdutoComFrete = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            const freteFinal = temProdutoComFrete ? 5 : 0;
+            const totalComFrete = totalGeral + freteFinal;
+            
+            if (freteFinal > 0) {
+                resumo += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
+            }
+            resumo += `🚚 *TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
+            resumo += `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"> <span style="font-size: 1.2em; font-weight: bold; color: #8000BF;">Obrigado por escolher D&G Açaí Berry!</span> <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`;
+
+            // Adicionar logo no início do resumo
+            const resumoComLogo = `<div style="text-align: center; margin-bottom: 20px;">
+                <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 10px;">
+                <div style="font-size: 1.2em; font-weight: bold; color: #8000BF;">D&G AÇAÍ BERRY</div>
+            </div>
+            <div style="text-align: left; font-family: 'Courier New', monospace; font-size: 1em; line-height: 1.6; padding-left: 20px;">
+                ${resumo.replace('D&G AÇAÍ BERRY\n\n', '')}
+            </div>`;
+            
+            document.getElementById("resumo-content").innerHTML = resumoComLogo;
+            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalComFrete.toFixed(2)}`;
+            
+            const whatsappLink = `https://wa.me/17742577544?text=${encodeURIComponent(resumo)}`;
+            document.getElementById("whatsapp-link").href = whatsappLink;
+            
+            document.getElementById("resumo-section").style.display = "block";
+            document.getElementById("resumo-section").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Adicionar primeiro pedido automaticamente
+        window.onload = function() {
+            adicionarPedido();
+        };
+
+        // Prevenir zoom em inputs no iOS
+        document.addEventListener('touchstart', function() {}, {passive: true});
     </script>
 </body>
 </html> 
