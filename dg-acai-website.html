@@ -684,7 +684,7 @@
                 return;
             }
 
-            let resumo = "D&G AÇAÍ BERRY\n\n";
+            let resumo = "🍇 *D&G AÇAÍ BERRY* 🍇\n\n";
             let totalGeral = 0;
 
             for (let i = 1; i <= contador; i++) {
@@ -722,8 +722,8 @@
                 const subtotal = produtoPreco + valorDobro + valorExtras;
                 totalGeral += subtotal;
 
-                resumo += `<span style="font-weight: bold; font-size: 1.1em; margin-left: 10px;">${nome.toUpperCase()}</span>\n`;
-                resumo += `   <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 5px;"> ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                resumo += `🌟 *${nome.toUpperCase()}*\n`;
+                resumo += `   ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
                 
                 if (complementosInclusos.length > 0) {
                     resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
@@ -762,8 +762,9 @@
             if (freteFinal > 0) {
                 resumo += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
             }
-            resumo += `🚚 *TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
-            resumo += `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 20px; height: 20px; vertical-align: middle; margin-right: 5px;"> <span style="font-size: 1.2em; font-weight: bold; color: #8000BF;">Obrigado por escolher D&G Açaí Berry!</span> <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 20px; height: 20px; vertical-align: middle; margin-left: 5px;">`;
+            resumo += `🚚 *TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}* 🚚\n\n`;
+            resumo += `📱 *Faça seu pedido pelo WhatsApp!*\n`;
+            resumo += `🍇 *D&G Açaí Berry - Sistema de Pedidos Online*`;
 
             // Adicionar logo no início do resumo
             const resumoComLogo = `<div style="text-align: center; margin-bottom: 20px;">
