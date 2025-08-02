@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DG Açaí - Pedido Familiar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #820AD1;
+            color: white;
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #FFD700;
+        }
+
+        .pedido {
+            background: #9B30FF;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .pedido h3 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 5px;
+        }
+
+        button {
+            background-color: #FFD700;
+            color: #820AD1;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 120px;
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        .button-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        input[type="text"], select {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: none;
+            margin-top: 5px;
+        }
+
+        .resumo {
+            background: #9B30FF;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <h1>DG Açaí - Pedido Familiar</h1>
+    
+    <div class="button-row">
+        <button onclick="adicionarPedido()">+ Adicionar Pedido</button>
+        <button onclick="gerarPedidoFinal()">Gerar Pedido Final</button>
+    </div>
+
+    <div id="formulario"></div>
+
+    <div class="resumo">
+        <h3>Resumo do Pedido:</h3>
+        <textarea id="resumo" readonly placeholder="O resumo do pedido aparecerá aqui..."></textarea>
+        <div class="button-row">
+            <button onclick="copiarWhatsApp()">Copiar WhatsApp</button>
+        </div>
+    </div>
+
+    <script>
+        let contador = 0;
+
+        function adicionarPedido() {
+            contador++;
+            const div = document.createElement("div");
+            div.className = "pedido";
+            div.id = `pedido-${contador}`;
+            div.innerHTML = `
+                <h3>Pedido ${contador}</h3>
+                <label>Nome/Identificação: 
+                    <input type="text" id="nome-${contador}" placeholder="Ex: Mariana">
+                </label>
+                <label>Tamanho: 
+                    <select id="tamanho-${contador}">
+                        <option value="pequeno">Pequeno (R$10)</option>
+                        <option value="médio" selected>Médio (R$12)</option>
+                        <option value="grande">Grande (R$15)</option>
+                    </select>
+                </label>
+                <label>Complementos (R$1,50 cada):</label>
+                <label><input type="checkbox" value="leite em pó"> Leite em pó</label>
+                <label><input type="checkbox" value="leite condensado"> Leite condensado</label>
+                <label><input type="checkbox" value="granola"> Granola</label>
+                <label><input type="checkbox" value="banana"> Banana</label>
+                <label><input type="checkbox" value="morango"> Morango</label>
+                <label><input type="checkbox" value="paçoca"> Paçoca</label>
+                <label><input type="checkbox" value="amendoim"> Amendoim</label>
+                <label><input type="checkbox" value="calda de chocolate"> Calda de chocolate</label>
+                <label><input type="checkbox" value="nutella"> Nutella</label>
+            `;
+            document.getElementById("formulario").appendChild(div);
+        }
+
+        function gerarPedidoFinal() {
+            const precos = {
+                pequeno: 10,
+                médio: 12,
+                grande: 15
+            };
+            const adicional = 1.5;
+            const frete = 5;
+            let total = 0;
+            let resumo = "";
+
+            for (let i = 1; i <= contador; i++) {
+                const nome = document.getElementById(`nome-${i}`).value || `Pedido ${i}`;
+                const tamanho = document.getElementById(`tamanho-${i}`).value;
+                const checkboxes = document.querySelectorAll(`#pedido-${i} input[type=checkbox]:checked`);
+                const comps = Array.from(checkboxes).map(cb => cb.value);
+                
+                const precoBase = precos[tamanho];
+                const valorAdicionais = comps.length * adicional;
+                const subtotal = precoBase + valorAdicionais;
+                total += subtotal;
+
+                resumo += `🌟 ${nome}: Açaí ${tamanho.charAt(0).toUpperCase() + tamanho.slice(1)}`;
+                if (comps.length > 0) {
+                    resumo += ` + ${comps.join(', ')}`;
+                }
+                resumo += ` - R$ ${subtotal.toFixed(2)}\n`;
+            }
+
+            total += frete;
+            resumo += `\n🚚 Frete: R$ ${frete.toFixed(2)}`;
+            resumo += `\n💰 TOTAL: R$ ${total.toFixed(2)}`;
+
+            document.getElementById("resumo").value = resumo;
+        }
+
+        function copiarWhatsApp() {
+            const resumo = document.getElementById("resumo").value;
+            if (resumo.trim() === "") {
+                alert("Gere o pedido primeiro!");
+                return;
+            }
+
+            const mensagem = `🍇 *DG AÇAÍ - PEDIDO FAMILIAR* 🍇\n\n${resumo}\n\n📱 *Faça seu pedido pelo WhatsApp!*`;
+            
+            // Copiar para a área de transferência
+            navigator.clipboard.writeText(mensagem).then(() => {
+                alert("Pedido copiado! Cole no WhatsApp.");
+            }).catch(() => {
+                // Fallback para navegadores mais antigos
+                const textArea = document.createElement("textarea");
+                textArea.value = mensagem;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand("copy");
+                document.body.removeChild(textArea);
+                alert("Pedido copiado! Cole no WhatsApp.");
+            });
+        }
+
+        // Adicionar primeiro pedido automaticamente
+        window.onload = function() {
+            adicionarPedido();
+        };
+    </script>
+</body>
+</html> 

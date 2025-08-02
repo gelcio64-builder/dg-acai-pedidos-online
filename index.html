@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>DG Açaí - Pedidos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #8000BF 0%, #9B30FF 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 10px;
+            font-size: 16px;
+            line-height: 1.4;
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 10px;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 5px;
+        }
+
+        .header p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .pedido-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .pedido-card h3 {
+            color: #FFD700;
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #FFD700;
+            font-size: 1rem;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            -webkit-appearance: none;
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .produto-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            min-height: 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .produto-option:active {
+            transform: scale(0.98);
+        }
+
+        .produto-option.selected {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .produto-option input[type="radio"] {
+            display: none;
+        }
+
+        .produto-nome {
+            font-weight: bold;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .produto-preco {
+            color: #FFD700;
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        .complementos-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .complementos-section h4 {
+            color: #FFD700;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .complementos-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .complemento-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .complemento-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #FFD700;
+            -webkit-appearance: none;
+            appearance: none;
+            border: 2px solid #FFD700;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .complemento-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            color: #8000BF;
+            font-weight: bold;
+        }
+
+        .complemento-item label {
+            color: white;
+            font-weight: normal;
+            margin: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .extras-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .extras-section h4 {
+            color: #FFD700;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .extras-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px;
+        }
+
+        .extras-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #FFD700;
+            -webkit-appearance: none;
+            appearance: none;
+            border: 2px solid #FFD700;
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .extras-item input[type="checkbox"]:checked::after {
+            content: '✓';
+            position: absolute;
+            top: -2px;
+            left: 2px;
+            color: #8000BF;
+            font-weight: bold;
+        }
+
+        .extras-item label {
+            color: white;
+            font-weight: normal;
+            margin: 0;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            padding: 15px 20px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #8000BF;
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid #FFD700;
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+            font-size: 14px;
+            padding: 10px 15px;
+            min-height: 40px;
+        }
+
+        .resumo {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .resumo h3 {
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .resumo-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            padding: 15px;
+            white-space: pre-line;
+            font-family: monospace;
+            font-size: 13px;
+            line-height: 1.5;
+            max-height: 250px;
+            overflow-y: auto;
+            word-wrap: break-word;
+        }
+
+        .total-destaque {
+            background: #FFD700;
+            color: #8000BF;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+
+        .instrucoes {
+            background: rgba(255, 215, 0, 0.2);
+            border: 1px solid #FFD700;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .instrucoes h4 {
+            color: #FFD700;
+            margin-bottom: 10px;
+        }
+
+        .instrucoes p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                margin: 5px;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .complementos-grid,
+            .extras-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .pedido-card {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍇 DG Açaí 🍇</h1>
+            <p>Sistema de Pedidos Online</p>
+        </div>
+
+        <div class="instrucoes">
+            <h4>📱 Como usar:</h4>
+            <p>1. Preencha seu nome<br>
+               2. Escolha o produto<br>
+               3. Marque/desmarque complementos<br>
+               4. Clique em "Gerar Pedido"<br>
+               5. Envie pelo WhatsApp!</p>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="adicionarPedido()">➕ Adicionar Pedido</button>
+            <button class="btn btn-secondary" onclick="gerarPedidoFinal()">📋 Gerar Pedido Final</button>
+        </div>
+
+        <div id="pedidos-container"></div>
+
+        <div class="resumo" id="resumo-section" style="display: none;">
+            <h3>📋 Resumo do Pedido</h3>
+            <div class="resumo-content" id="resumo-content"></div>
+            <div class="total-destaque" id="total-destaque"></div>
+            <a href="#" class="btn whatsapp-btn" id="whatsapp-link" target="_blank">
+                📱 Enviar via WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let contador = 0;
+        const produtos = [
+            { nome: "Copo 500ml", preco: 12 },
+            { nome: "Copo 700ml", preco: 15 },
+            { nome: "Marmita Açaí", preco: 22 },
+            { nome: "Barca Açaí", preco: 27 },
+            { nome: "Balde 2kg", preco: 35 },
+            { nome: "Roleta Açaí", preco: 40 }
+        ];
+
+        const complementosInclusos = [
+            "Leite Ninho", "Leite Condensado", "Paçoca", "Granola",
+            "Amendoim", "Banana", "Uva", "Morango"
+        ];
+
+        const extras = ["Nutella", "Creme de Ninho"];
+
+        function adicionarPedido() {
+            contador++;
+            const pedidoDiv = document.createElement("div");
+            pedidoDiv.className = "pedido-card";
+            pedidoDiv.id = `pedido-${contador}`;
+
+            let produtosHTML = produtos.map(produto => `
+                <div class="produto-option" onclick="selecionarProduto(this, ${contador})">
+                    <input type="radio" name="produto-${contador}" value="${produto.nome}" data-preco="${produto.preco}">
+                    <div class="produto-nome">${produto.nome}</div>
+                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            let complementosHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <input type="checkbox" id="comp-${contador}-${comp}" checked>
+                    <label for="comp-${contador}-${comp}">${comp}</label>
+                </div>
+            `).join('');
+
+            let complementosDobroHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <input type="checkbox" id="dobro-${contador}-${comp}">
+                    <label for="dobro-${contador}-${comp}">${comp}</label>
+                </div>
+            `).join('');
+
+            let extrasHTML = extras.map(extra => `
+                <div class="extras-item">
+                    <input type="checkbox" id="extra-${contador}-${extra}">
+                    <label for="extra-${contador}-${extra}">${extra}</label>
+                </div>
+            `).join('');
+
+            pedidoDiv.innerHTML = `
+                <h3>Pedido ${contador}</h3>
+                <button class="btn btn-danger" onclick="removerPedido(${contador})">❌ Remover</button>
+                
+                <div class="form-group">
+                    <label>👤 Nome do Cliente *</label>
+                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label>🍇 Escolha seu Produto *</label>
+                    <div class="produtos-grid">
+                        ${produtosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section">
+                    <h4>✅ Complementos Inclusos (Gratuitos)</h4>
+                    <div class="complementos-grid">
+                        ${complementosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section">
+                    <h4>➕ Complementos em Dobro (+R$1,50)</h4>
+                    <div class="complementos-grid">
+                        ${complementosDobroHTML}
+                    </div>
+                </div>
+
+                <div class="extras-section">
+                    <h4>🍫 Extras Especiais (+R$1,50)</h4>
+                    <div class="extras-grid">
+                        ${extrasHTML}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("pedidos-container").appendChild(pedidoDiv);
+        }
+
+        function selecionarProduto(elemento, pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.querySelectorAll('.produto-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('input[type="radio"]').checked = false;
+            });
+
+            elemento.classList.add('selected');
+            elemento.querySelector('input[type="radio"]').checked = true;
+        }
+
+        function removerPedido(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.remove();
+        }
+
+        function gerarPedidoFinal() {
+            if (contador === 0) {
+                alert("Adicione pelo menos um pedido!");
+                return;
+            }
+
+            let resumo = "🍇 *DG AÇAÍ - PEDIDO FAMILIAR* 🍇\n\n";
+            let totalGeral = 0;
+
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                
+                if (!produtoSelecionado) {
+                    alert(`Por favor, selecione um produto para o pedido ${i}`);
+                    return;
+                }
+
+                const produtoNome = produtoSelecionado.value;
+                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
+
+                const complementosInclusos = [];
+                pedidoElement.querySelectorAll('.complementos-section:first-of-type input[type="checkbox"]:checked').forEach(cb => {
+                    complementosInclusos.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const complementosDobro = [];
+                pedidoElement.querySelectorAll('.complementos-section:nth-of-type(2) input[type="checkbox"]:checked').forEach(cb => {
+                    complementosDobro.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobro.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = produtoPreco + valorDobro + valorExtras;
+                totalGeral += subtotal;
+
+                resumo += `🌟 *${nome}*\n`;
+                resumo += `   ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                
+                if (complementosInclusos.length > 0) {
+                    resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
+                }
+                
+                if (complementosDobro.length > 0) {
+                    resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                }
+                
+                if (extras.length > 0) {
+                    resumo += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumo += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+
+            resumo += `🚚 *TOTAL GERAL: R$ ${totalGeral.toFixed(2)}* 🚚\n\n`;
+            resumo += `📱 *Faça seu pedido pelo WhatsApp!*`;
+
+            document.getElementById("resumo-content").textContent = resumo;
+            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalGeral.toFixed(2)}`;
+            
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(resumo)}`;
+            document.getElementById("whatsapp-link").href = whatsappLink;
+            
+            document.getElementById("resumo-section").style.display = "block";
+            document.getElementById("resumo-section").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Adicionar primeiro pedido automaticamente
+        window.onload = function() {
+            adicionarPedido();
+        };
+
+        // Prevenir zoom em inputs no iOS
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
+</body>
+</html> 

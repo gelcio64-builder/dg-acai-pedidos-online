@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DG Açaí - Sistema de Pedidos</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8000BF 0%, #9B30FF 100%);
+            color: white;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: #FFD700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .pedido-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .pedido-card h3 {
+            color: #FFD700;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #FFD700;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .produto-option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .produto-option:hover {
+            border-color: #FFD700;
+            transform: translateY(-2px);
+        }
+
+        .produto-option.selected {
+            border-color: #FFD700;
+            background: rgba(255, 215, 0, 0.2);
+        }
+
+        .produto-option input[type="radio"] {
+            display: none;
+        }
+
+        .produto-nome {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .produto-preco {
+            color: #FFD700;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .complementos-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .complementos-section h4 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .complementos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .complemento-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .complemento-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #FFD700;
+        }
+
+        .complemento-item label {
+            color: white;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .extras-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .extras-section h4 {
+            color: #FFD700;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .extras-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .extras-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #FFD700;
+        }
+
+        .extras-item label {
+            color: white;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: #FFD700;
+            color: #8000BF;
+        }
+
+        .btn-primary:hover {
+            background: #FFED4E;
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid #FFD700;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+
+        .resumo {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .resumo h3 {
+            color: #FFD700;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .resumo-content {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+            padding: 20px;
+            white-space: pre-line;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .total-destaque {
+            background: #FFD700;
+            color: #8000BF;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            margin-top: 15px;
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .produtos-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .complementos-grid,
+            .extras-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+
+        .remove-btn {
+            background: #ff4757;
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+
+        .remove-btn:hover {
+            background: #ff3742;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍇 DG Açaí 🍇</h1>
+            <p>Sistema de Pedidos Online</p>
+        </div>
+
+        <div class="buttons">
+            <button class="btn btn-primary" onclick="adicionarPedido()">+ Adicionar Pedido</button>
+            <button class="btn btn-secondary" onclick="gerarPedidoFinal()">Gerar Pedido Final</button>
+        </div>
+
+        <div id="pedidos-container"></div>
+
+        <div class="resumo" id="resumo-section" style="display: none;">
+            <h3>📋 Resumo do Pedido</h3>
+            <div class="resumo-content" id="resumo-content"></div>
+            <div class="total-destaque" id="total-destaque"></div>
+            <a href="#" class="btn whatsapp-btn" id="whatsapp-link" target="_blank">
+                📱 Enviar via WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <script>
+        let contador = 0;
+        const produtos = [
+            { nome: "Copo 500ml", preco: 12 },
+            { nome: "Copo 700ml", preco: 15 },
+            { nome: "Marmita Açaí", preco: 22 },
+            { nome: "Barca Açaí", preco: 27 },
+            { nome: "Balde 2kg", preco: 35 },
+            { nome: "Roleta Açaí", preco: 40 }
+        ];
+
+        const complementosInclusos = [
+            "Leite Ninho", "Leite Condensado", "Paçoca", "Granola",
+            "Amendoim", "Banana", "Uva", "Morango"
+        ];
+
+        const extras = ["Nutella", "Creme de Ninho"];
+
+        function adicionarPedido() {
+            contador++;
+            const pedidoDiv = document.createElement("div");
+            pedidoDiv.className = "pedido-card";
+            pedidoDiv.id = `pedido-${contador}`;
+
+            let produtosHTML = produtos.map(produto => `
+                <div class="produto-option" onclick="selecionarProduto(this, ${contador})">
+                    <input type="radio" name="produto-${contador}" value="${produto.nome}" data-preco="${produto.preco}">
+                    <div class="produto-nome">${produto.nome}</div>
+                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                </div>
+            `).join('');
+
+            let complementosHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <input type="checkbox" id="comp-${contador}-${comp}" checked>
+                    <label for="comp-${contador}-${comp}">${comp}</label>
+                </div>
+            `).join('');
+
+            let complementosDobroHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <input type="checkbox" id="dobro-${contador}-${comp}">
+                    <label for="dobro-${contador}-${comp}">${comp}</label>
+                </div>
+            `).join('');
+
+            let extrasHTML = extras.map(extra => `
+                <div class="extras-item">
+                    <input type="checkbox" id="extra-${contador}-${extra}">
+                    <label for="extra-${contador}-${extra}">${extra}</label>
+                </div>
+            `).join('');
+
+            pedidoDiv.innerHTML = `
+                <h3>Pedido ${contador}</h3>
+                <button class="remove-btn" onclick="removerPedido(${contador})">❌ Remover Pedido</button>
+                
+                <div class="form-group">
+                    <label>👤 Nome do Cliente *</label>
+                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label>🍇 Escolha seu Produto *</label>
+                    <div class="produtos-grid">
+                        ${produtosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section">
+                    <h4>✅ Complementos Inclusos (Gratuitos)</h4>
+                    <div class="complementos-grid">
+                        ${complementosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section">
+                    <h4>➕ Complementos em Dobro (+R$1,50 cada)</h4>
+                    <div class="complementos-grid">
+                        ${complementosDobroHTML}
+                    </div>
+                </div>
+
+                <div class="extras-section">
+                    <h4>🍫 Extras Especiais (+R$1,50 cada)</h4>
+                    <div class="extras-grid">
+                        ${extrasHTML}
+                    </div>
+                </div>
+            `;
+
+            document.getElementById("pedidos-container").appendChild(pedidoDiv);
+        }
+
+        function selecionarProduto(elemento, pedidoId) {
+            // Remove seleção anterior
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.querySelectorAll('.produto-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.querySelector('input[type="radio"]').checked = false;
+            });
+
+            // Seleciona o novo
+            elemento.classList.add('selected');
+            elemento.querySelector('input[type="radio"]').checked = true;
+        }
+
+        function removerPedido(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            pedido.remove();
+        }
+
+        function gerarPedidoFinal() {
+            if (contador === 0) {
+                alert("Adicione pelo menos um pedido!");
+                return;
+            }
+
+            let resumo = "🍇 *DG AÇAÍ - PEDIDO FAMILIAR* 🍇\n\n";
+            let totalGeral = 0;
+
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                
+                if (!produtoSelecionado) {
+                    alert(`Por favor, selecione um produto para o pedido ${i}`);
+                    return;
+                }
+
+                const produtoNome = produtoSelecionado.value;
+                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
+
+                // Complementos inclusos
+                const complementosInclusos = [];
+                pedidoElement.querySelectorAll('.complementos-section:first-of-type input[type="checkbox"]:checked').forEach(cb => {
+                    complementosInclusos.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                // Complementos em dobro
+                const complementosDobro = [];
+                pedidoElement.querySelectorAll('.complementos-section:nth-of-type(2) input[type="checkbox"]:checked').forEach(cb => {
+                    complementosDobro.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                // Extras
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobro.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = produtoPreco + valorDobro + valorExtras;
+                totalGeral += subtotal;
+
+                resumo += `🌟 *${nome}*\n`;
+                resumo += `   ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                
+                if (complementosInclusos.length > 0) {
+                    resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
+                }
+                
+                if (complementosDobro.length > 0) {
+                    resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                }
+                
+                if (extras.length > 0) {
+                    resumo += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumo += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+
+            resumo += `🚚 *TOTAL GERAL: R$ ${totalGeral.toFixed(2)}* 🚚\n\n`;
+            resumo += `📱 *Faça seu pedido pelo WhatsApp!*`;
+
+            document.getElementById("resumo-content").textContent = resumo;
+            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalGeral.toFixed(2)}`;
+            
+            const whatsappLink = `https://wa.me/?text=${encodeURIComponent(resumo)}`;
+            document.getElementById("whatsapp-link").href = whatsappLink;
+            
+            document.getElementById("resumo-section").style.display = "block";
+            document.getElementById("resumo-section").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Adicionar primeiro pedido automaticamente
+        window.onload = function() {
+            adicionarPedido();
+        };
+    </script>
+</body>
+</html> 

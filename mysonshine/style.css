@@ -1,0 +1,284 @@
+body {
+  margin: 0;
+  font-family: 'Comic Sans MS', 'Arial Rounded MT Bold', Arial, sans-serif;
+  background: #fff8f0;
+  color: #333;
+}
+
+header {
+  background: #ffe066;
+  padding: 1rem 0;
+  box-shadow: 0 2px 8px #ffe06644;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f7b801;
+  text-decoration: none;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1.5rem;
+  margin: 0;
+  padding: 0;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #333;
+  font-weight: 500;
+  transition: color 0.2s;
+}
+
+nav ul li a:hover {
+  color: #f7b801;
+}
+
+.banner {
+  background: linear-gradient(120deg, #ffd6e0 0%, #b5ead7 100%);
+  text-align: center;
+  padding: 4rem 2rem 3rem 2rem;
+  border-radius: 0 0 40px 40px;
+  margin-bottom: 2rem;
+}
+
+.banner h1 {
+  font-size: 2.5rem;
+  color: #f7b801;
+  margin-bottom: 1rem;
+}
+
+.banner p {
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.botoes {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn {
+  background: #f7b801;
+  color: #fff;
+  padding: 0.8rem 1.5rem;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 1rem;
+  transition: background 0.2s;
+}
+
+.btn:hover {
+  background: #ffbe76;
+}
+
+footer {
+  background: #ffe066;
+  text-align: center;
+  padding: 1rem 0;
+  margin-top: 2rem;
+  font-size: 1rem;
+  color: #333;
+}
+
+/* Responsivo */
+@media (max-width: 700px) {
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .banner {
+    padding: 2rem 1rem;
+  }
+  .banner h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Formulário de Matrícula */
+.matricula {
+  max-width: 500px;
+  margin: 2rem auto;
+  background: #fffbe6;
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.08);
+  text-align: center;
+}
+.matricula h1 {
+  color: #3a86ff;
+  margin-bottom: 1.5rem;
+}
+.matricula form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.matricula label {
+  text-align: left;
+  font-weight: bold;
+  color: #f7b801;
+  margin-bottom: 0.2rem;
+}
+.matricula input,
+.matricula select,
+.matricula textarea {
+  padding: 0.7rem 1rem;
+  border: 1px solid #ffe066;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: #fff;
+  margin-bottom: 0.5rem;
+  transition: border 0.2s;
+}
+.matricula input:focus,
+.matricula select:focus,
+.matricula textarea:focus {
+  border: 1.5px solid #3a86ff;
+  outline: none;
+}
+.matricula button.btn {
+  margin-top: 1rem;
+  width: 100%;
+  font-size: 1.1rem;
+  padding: 1rem;
+  border-radius: 30px;
+  background: linear-gradient(90deg, #f7b801 60%, #ffe066 100%);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.matricula button.btn:hover {
+  background: linear-gradient(90deg, #ffe066 0%, #f7b801 100%);
+  color: #3a86ff;
+}
+
+/* Galeria de Fotos - visual aprimorado */
+.galeria {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fffbe6;
+  border-radius: 30px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 32px rgba(58,134,255,0.10);
+  text-align: center;
+}
+.galeria h1 {
+  color: #3a86ff;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+.fotos-galeria {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+}
+.fotos-galeria img {
+  width: 240px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 18px;
+  background: #fff;
+  border: 4px solid #ffe066;
+  box-shadow: 0 6px 24px rgba(58,134,255,0.18);
+  transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.fotos-galeria img:hover {
+  transform: scale(1.07) rotate(-2deg);
+  box-shadow: 0 12px 36px rgba(58,134,255,0.25);
+  border-color: #f7b801;
+}
+
+/* Serviços - layout profissional */
+.servicos {
+  max-width: 900px;
+  margin: 2rem auto;
+  background: #fffbe6;
+  border-radius: 30px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 4px 32px rgba(58,134,255,0.10);
+  text-align: center;
+  position: relative;
+}
+.servicos h1 {
+  color: #3a86ff;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  letter-spacing: 1px;
+}
+.servicos ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+  margin-bottom: 2rem;
+}
+.servicos ul li {
+  background: #f7faff;
+  border: 2px solid #ffe066;
+  border-radius: 18px;
+  box-shadow: 0 4px 16px rgba(58,134,255,0.08);
+  padding: 1.5rem 1.2rem;
+  max-width: 320px;
+  min-width: 220px;
+  flex: 1 1 220px;
+  text-align: left;
+  font-size: 1.08rem;
+  position: relative;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.servicos ul li:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 8px 32px rgba(58,134,255,0.15);
+  border-color: #3a86ff;
+}
+.servicos ul li::before {
+  content: "\2600 "; /* Sol */
+  font-size: 1.3rem;
+  position: static;
+  margin-right: 0.5rem;
+  color: #f7b801;
+}
+.servicos ul li strong {
+  color: #f7b801;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+.servicos p {
+  font-size: 1.1em;
+  color: #3a86ff;
+  margin-top: 2rem;
+}
+.icone-sol {
+  display: none;
+}
+@media (max-width: 900px) {
+  .servicos ul {
+    flex-direction: column;
+    align-items: center;
+  }
+  .servicos ul li {
+    max-width: 100%;
+    min-width: 0;
+  }
+}
