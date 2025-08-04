@@ -244,6 +244,23 @@
             box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
         }
 
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
         .produtos-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -538,10 +555,7 @@
             <p>Faça Seu Pedido Online</p>
             <p>Sistema Moderno de Pedidos • Delivery via WhatsApp</p>
             
-            <div class="controls">
-                <button class="btn" onclick="adicionarPedido()">➕ Adicionar Pedido</button>
-                <button class="btn" onclick="gerarPedidoFinal()">📋 Gerar Pedido Final</button>
-            </div>
+
         </div>
 
         <div id="pedidos-container">
@@ -561,7 +575,6 @@
 
         <div class="footer">
             <p>📱 Acesse pelo celular para melhor experiência</p>
-            <p>💬 Pedidos via WhatsApp - DG Açaí</p>
             <p><img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px; border-radius: 50%;"> Sistema de Pedidos Online</p>
         </div>
     </div>
@@ -626,11 +639,31 @@
                 
                 <div class="form-group">
                     <label>👤 Nome do Cliente *</label>
-                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome completo" required>
+                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome" required>
                 </div>
 
                 <div class="form-group">
-                    <label>🍇 Escolha seu Produto *</label>
+                    <label>🏙️ Cidade *</label>
+                    <select id="cidade-${contador}" required>
+                        <option value="">Selecione sua cidade</option>
+                        <option value="Abington">Abington</option>
+                        <option value="Brockton">Brockton</option>
+                        <option value="East Bridgewater">East Bridgewater</option>
+                        <option value="Holbrook">Holbrook</option>
+                        <option value="Randolph">Randolph</option>
+                        <option value="Rockland">Rockland</option>
+                        <option value="Weymouth">Weymouth</option>
+                        <option value="Whitman">Whitman</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📍 Endereço de Entrega *</label>
+                    <input type="text" id="endereco-${contador}" placeholder="Digite seu endereço" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Escolha seu Produto *</label>
                     <div class="produtos-grid">
                         ${produtosHTML}
                     </div>
@@ -684,7 +717,7 @@
                 return;
             }
 
-            let resumo = "🍇 *D&G AÇAÍ BERRY* 🍇\n\n";
+            let resumo = "*D&G AÇAÍ BERRY*\n\n";
             let totalGeral = 0;
 
             for (let i = 1; i <= contador; i++) {
@@ -692,10 +725,22 @@
                 if (!pedidoElement) continue;
 
                 const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
+                const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
                 const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
                 
                 if (!produtoSelecionado) {
                     alert(`Por favor, selecione um produto para o pedido ${i}`);
+                    return;
+                }
+
+                if (!cidade || cidade === 'Cidade não informada') {
+                    alert(`Por favor, selecione uma cidade para o pedido ${i}`);
+                    return;
+                }
+
+                if (!endereco || endereco === 'Endereço não informado') {
+                    alert(`Por favor, informe o endereço para o pedido ${i}`);
                     return;
                 }
 
@@ -722,8 +767,10 @@
                 const subtotal = produtoPreco + valorDobro + valorExtras;
                 totalGeral += subtotal;
 
-                resumo += `🌟 *${nome.toUpperCase()}*\n`;
-                resumo += `   ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                resumo += `🍇 *${nome.toUpperCase()}*\n`;
+                resumo += `   🏙️ ${cidade}\n`;
+                resumo += `   📍 ${endereco}\n`;
+                resumo += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
                 
                 if (complementosInclusos.length > 0) {
                     resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
@@ -742,29 +789,39 @@
 
             // Verificar se há produtos que precisam de frete (não são baldes)
             let temProdutoComFrete = false;
+            let clienteWhitman = false;
+            
             for (let i = 1; i <= contador; i++) {
                 const pedidoElement = document.getElementById(`pedido-${i}`);
                 if (pedidoElement) {
                     const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                    const cidade = document.getElementById(`cidade-${i}`).value;
+                    
                     if (produtoSelecionado) {
                         const produtoNome = produtoSelecionado.value;
                         if (!produtoNome.toLowerCase().includes('balde')) {
                             temProdutoComFrete = true;
-                            break;
                         }
+                    }
+                    
+                    // Verificar se algum cliente é de Whitman
+                    if (cidade === 'Whitman') {
+                        clienteWhitman = true;
                     }
                 }
             }
             
-            const freteFinal = temProdutoComFrete ? 5 : 0;
+            // Não cobrar frete se cliente for de Whitman
+            const freteFinal = (temProdutoComFrete && !clienteWhitman) ? 5 : 0;
             const totalComFrete = totalGeral + freteFinal;
             
             if (freteFinal > 0) {
                 resumo += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
+            } else if (clienteWhitman) {
+                resumo += `🎉 *FRETE GRÁTIS - Cliente Whitman!*\n`;
             }
-            resumo += `🚚 *TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}* 🚚\n\n`;
-            resumo += `📱 *Faça seu pedido pelo WhatsApp!*\n`;
-            resumo += `🍇 *D&G Açaí Berry - Sistema de Pedidos Online*`;
+            resumo += `*TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
+            resumo += `\n\n*Obrigado por escolher D&G Açaí Berry!*`;
 
             // Adicionar logo no início do resumo
             const resumoComLogo = `<div style="text-align: center; margin-bottom: 20px;">
@@ -772,7 +829,10 @@
                 <div style="font-size: 1.2em; font-weight: bold; color: #8000BF;">D&G AÇAÍ BERRY</div>
             </div>
             <div style="text-align: left; font-family: 'Courier New', monospace; font-size: 1em; line-height: 1.6; padding-left: 20px;">
-                ${resumo.replace('D&G AÇAÍ BERRY\n\n', '')}
+                ${resumo.replace('*Obrigado por escolher D&G Açaí Berry!*', '').replace('🍇', '<img src="dg-acai-logo.png.png" alt="DG Açaí" style="width: 20px; height: 20px; vertical-align: middle; border-radius: 50%; margin-right: 5px;">')}
+            </div>
+            <div style="text-align: center; margin-top: 20px; font-family: 'Courier New', monospace; font-size: 1.1em; font-weight: bold; color: #8000BF;">
+                *Obrigado por escolher D&G Açaí Berry!*
             </div>`;
             
             document.getElementById("resumo-content").innerHTML = resumoComLogo;
