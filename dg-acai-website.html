@@ -595,7 +595,7 @@
             "Amendoim", "Banana", "Uva", "Morango"
         ];
 
-        const extras = ["Nutella", "Creme de Ninho"];
+        const extras = ["Nutella", "Creme de Ninho", "Sucrilhos"];
 
         function adicionarPedido() {
             contador++;
@@ -704,6 +704,55 @@
 
             elemento.classList.add('selected');
             elemento.querySelector('input[type="radio"]').checked = true;
+
+            // Verificar se é balde e ajustar complementos
+            const produtoSelecionado = elemento.querySelector('input[type="radio"]');
+            const produtoNome = produtoSelecionado.value;
+            const complementosSection = pedido.querySelector('.complementos-section');
+            
+            if (produtoNome.toLowerCase().includes('balde')) {
+                // Para baldes, mostrar apenas opção em dobro
+                complementosSection.querySelectorAll('.complemento-item').forEach(item => {
+                    const checkboxIncluso = item.querySelector('input[type="checkbox"].incluso');
+                    const labelIncluso = item.querySelector('label:first-child');
+                    
+                    // Esconder checkbox e label de inclusos
+                    checkboxIncluso.style.display = 'none';
+                    labelIncluso.style.display = 'none';
+                    
+                    // Mostrar apenas opção em dobro
+                    const checkboxDobro = item.querySelector('input[type="checkbox"].dobro');
+                    const labelDobro = item.querySelector('label:last-child');
+                    checkboxDobro.style.display = 'block';
+                    labelDobro.style.display = 'block';
+                });
+                
+                // Atualizar texto da seção
+                const titulo = complementosSection.querySelector('h4');
+                const descricao = complementosSection.querySelector('p');
+                titulo.textContent = '🍫 Complementos Especiais (Em Dobro)';
+                descricao.textContent = 'Para baldes, todos os complementos são adicionais especiais. Marque os que deseja incluir (+R$1,50 cada).';
+            } else {
+                // Para outros produtos, mostrar opções normais
+                complementosSection.querySelectorAll('.complemento-item').forEach(item => {
+                    const checkboxIncluso = item.querySelector('input[type="checkbox"].incluso');
+                    const labelIncluso = item.querySelector('label:first-child');
+                    const checkboxDobro = item.querySelector('input[type="checkbox"].dobro');
+                    const labelDobro = item.querySelector('label:last-child');
+                    
+                    // Mostrar todas as opções
+                    checkboxIncluso.style.display = 'block';
+                    labelIncluso.style.display = 'block';
+                    checkboxDobro.style.display = 'block';
+                    labelDobro.style.display = 'block';
+                });
+                
+                // Restaurar texto original
+                const titulo = complementosSection.querySelector('h4');
+                const descricao = complementosSection.querySelector('p');
+                titulo.textContent = '✅ Complementos Disponíveis';
+                descricao.textContent = 'Marque os complementos que deseja incluir no seu açaí. Para pedir em dobro, marque a opção extra (+R$1,50).';
+            }
         }
 
         function removerPedido(pedidoId) {
@@ -746,16 +795,26 @@
 
                 const produtoNome = produtoSelecionado.value;
                 const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
-
+                const isBalde = produtoNome.toLowerCase().includes('balde');
+                
                 const complementosInclusos = [];
-                pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
-                    complementosInclusos.push(cb.dataset.nome);
-                });
-
                 const complementosDobro = [];
-                pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
-                    complementosDobro.push(cb.dataset.nome);
-                });
+                
+                if (isBalde) {
+                    // Para baldes, todos os complementos são tratados como extras
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"]:checked').forEach(cb => {
+                        complementosDobro.push(cb.dataset.nome);
+                    });
+                } else {
+                    // Para outros produtos, separar inclusos e em dobro
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
+                        complementosInclusos.push(cb.dataset.nome);
+                    });
+
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
+                        complementosDobro.push(cb.dataset.nome);
+                    });
+                }
 
                 const extras = [];
                 pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
@@ -772,12 +831,18 @@
                 resumo += `   📍 ${endereco}\n`;
                 resumo += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
                 
-                if (complementosInclusos.length > 0) {
-                    resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
-                }
-                
-                if (complementosDobro.length > 0) {
-                    resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                if (isBalde) {
+                    if (complementosDobro.length > 0) {
+                        resumo += `   🍫 Complementos: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    }
+                } else {
+                    if (complementosInclusos.length > 0) {
+                        resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
+                    }
+                    
+                    if (complementosDobro.length > 0) {
+                        resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    }
                 }
                 
                 if (extras.length > 0) {
