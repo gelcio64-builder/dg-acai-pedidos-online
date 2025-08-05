@@ -592,16 +592,31 @@
 
         const complementosInclusos = [
             "Leite Ninho", "Leite Condensado", "Paçoca", "Granola",
-            "Amendoim", "Banana", "Uva", "Morango"
+            "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"
         ];
 
-        const extras = ["Nutella", "Creme de Ninho", "Sucrilhos"];
+        const extras = ["Nutella", "Creme de Ninho"];
 
         function adicionarPedido() {
             contador++;
             const pedidoDiv = document.createElement("div");
             pedidoDiv.className = "pedido-card";
             pedidoDiv.id = `pedido-${contador}`;
+            
+            // Preencher automaticamente cidade e endereço do primeiro pedido (se existir)
+            let cidadeAuto = '';
+            let enderecoAuto = '';
+            
+            if (contador > 1) {
+                const primeiroPedido = document.getElementById('pedido-1');
+                if (primeiroPedido) {
+                    const cidadeSelect = primeiroPedido.querySelector('select');
+                    const enderecoInput = primeiroPedido.querySelectorAll('input[type="text"]')[1];
+                    
+                    if (cidadeSelect && cidadeSelect.value) cidadeAuto = cidadeSelect.value;
+                    if (enderecoInput && enderecoInput.value) enderecoAuto = enderecoInput.value;
+                }
+            }
 
             let produtosHTML = produtos.map(produto => `
                 <div class="produto-option" onclick="selecionarProduto(this, ${contador})">
@@ -633,7 +648,7 @@
 
             pedidoDiv.innerHTML = `
                 <div class="pedido-header">
-                    <h3><img src="dg-acai-logo.png.png" alt="DG Açaí" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${contador}</h3>
+                    <h3><img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${contador}</h3>
                     <button class="btn btn-danger" onclick="removerPedido(${contador})">❌ Remover</button>
                 </div>
                 
@@ -646,20 +661,20 @@
                     <label>🏙️ Cidade *</label>
                     <select id="cidade-${contador}" required>
                         <option value="">Selecione sua cidade</option>
-                        <option value="Abington">Abington</option>
-                        <option value="Brockton">Brockton</option>
-                        <option value="East Bridgewater">East Bridgewater</option>
-                        <option value="Holbrook">Holbrook</option>
-                        <option value="Randolph">Randolph</option>
-                        <option value="Rockland">Rockland</option>
-                        <option value="Weymouth">Weymouth</option>
-                        <option value="Whitman">Whitman</option>
+                        <option value="Abington" ${cidadeAuto === 'Abington' ? 'selected' : ''}>Abington</option>
+                        <option value="Brockton" ${cidadeAuto === 'Brockton' ? 'selected' : ''}>Brockton</option>
+                        <option value="East Bridgewater" ${cidadeAuto === 'East Bridgewater' ? 'selected' : ''}>East Bridgewater</option>
+                        <option value="Holbrook" ${cidadeAuto === 'Holbrook' ? 'selected' : ''}>Holbrook</option>
+                        <option value="Randolph" ${cidadeAuto === 'Randolph' ? 'selected' : ''}>Randolph</option>
+                        <option value="Rockland" ${cidadeAuto === 'Rockland' ? 'selected' : ''}>Rockland</option>
+                        <option value="Weymouth" ${cidadeAuto === 'Weymouth' ? 'selected' : ''}>Weymouth</option>
+                        <option value="Whitman" ${cidadeAuto === 'Whitman' ? 'selected' : ''}>Whitman</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <label>📍 Endereço de Entrega *</label>
-                    <input type="text" id="endereco-${contador}" placeholder="Digite seu endereço" required>
+                    <input type="text" id="endereco-${contador}" placeholder="Digite seu endereço" value="${enderecoAuto}" required>
                 </div>
 
                 <div class="form-group">
@@ -826,7 +841,7 @@
                 const subtotal = produtoPreco + valorDobro + valorExtras;
                 totalGeral += subtotal;
 
-                resumo += `🍇 *${nome.toUpperCase()}*\n`;
+                resumo += `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> *${nome.toUpperCase()}*\n`;
                 resumo += `   🏙️ ${cidade}\n`;
                 resumo += `   📍 ${endereco}\n`;
                 resumo += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
@@ -888,7 +903,7 @@
             resumo += `*TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
             resumo += `\n\n*Obrigado por escolher D&G Açaí Berry!*`;
 
-            // Adicionar logo no início do resumo
+            // Criar versão para exibição na tela (com imagens)
             const resumoComLogo = `<div style="text-align: center; margin-bottom: 20px;">
                 <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 10px;">
                 <div style="font-size: 1.2em; font-weight: bold; color: #8000BF;">D&G AÇAÍ BERRY</div>
@@ -901,10 +916,81 @@
             </div>`;
             
             document.getElementById("resumo-content").innerHTML = resumoComLogo;
-            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalComFrete.toFixed(2)}`;
             
-            const whatsappLink = `https://wa.me/17742577544?text=${encodeURIComponent(resumo)}`;
+            // Criar versão para WhatsApp (apenas texto)
+            let resumoWhatsApp = "🍇 *D&G AÇAÍ BERRY* 🍇\n\n";
+            
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
+                const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
+                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                
+                if (!produtoSelecionado) continue;
+
+                const produtoNome = produtoSelecionado.value;
+                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
+                const isBalde = produtoNome.toLowerCase().includes('balde');
+                
+                const complementosInclusos = [];
+                const complementosDobro = [];
+                
+                if (isBalde) {
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"]:checked').forEach(cb => {
+                        complementosDobro.push(cb.dataset.nome);
+                    });
+                } else {
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
+                        complementosInclusos.push(cb.dataset.nome);
+                    });
+
+                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
+                        complementosDobro.push(cb.dataset.nome);
+                    });
+                }
+
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobro.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = produtoPreco + valorDobro + valorExtras;
+                
+                resumoWhatsApp += `🍇 *${nome.toUpperCase()}*\n`;
+                resumoWhatsApp += `   🏙️ ${cidade}\n`;
+                resumoWhatsApp += `   📍 ${endereco}\n`;
+                resumoWhatsApp += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
+                
+                if (isBalde) {
+                    if (complementosDobro.length > 0) {
+                        resumoWhatsApp += `   🍫 Complementos: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    }
+                } else {
+                    if (complementosInclusos.length > 0) {
+                        resumoWhatsApp += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
+                    }
+                    
+                    if (complementosDobro.length > 0) {
+                        resumoWhatsApp += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    }
+                }
+                
+                if (extras.length > 0) {
+                    resumoWhatsApp += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumoWhatsApp += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+            
+            // Usar versão WhatsApp para o link
+            const whatsappLink = `https://wa.me/17742577544?text=${encodeURIComponent(resumoWhatsApp)}`;
             document.getElementById("whatsapp-link").href = whatsappLink;
+            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalComFrete.toFixed(2)}`;
             
             document.getElementById("resumo-section").style.display = "block";
             document.getElementById("resumo-section").scrollIntoView({ behavior: 'smooth' });
