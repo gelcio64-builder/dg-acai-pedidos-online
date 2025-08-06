@@ -263,48 +263,84 @@
 
         .produtos-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: repeat(3, 1fr);
             gap: 15px;
             margin-top: 15px;
         }
 
-        .produto-option {
-            background: rgba(255, 255, 255, 0.1);
-            border: 3px solid transparent;
+        .produto-card {
+            background: white;
             border-radius: 15px;
             padding: 20px;
-            text-align: center;
-            cursor: pointer;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
             transition: all 0.3s ease;
-            position: relative;
         }
 
-        .produto-option:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        .produto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
         }
 
-        .produto-option.selected {
-            border-color: #FFD700;
-            background: rgba(255, 215, 0, 0.2);
-            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
-        }
-
-        .produto-option input[type="radio"] {
-            display: none;
+        .produto-info {
+            flex: 1;
         }
 
         .produto-nome {
             font-weight: bold;
-            margin-bottom: 8px;
             font-size: 1.1em;
+            color: #8000BF;
+            margin-bottom: 5px;
         }
 
         .produto-preco {
-            color: #FFD700;
-            font-weight: bold;
             font-size: 1.2em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .quantidade-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: #8000BF;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: #6000A0;
+            transform: scale(1.1);
+        }
+
+        .qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qty-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #8000BF;
         }
 
         .complementos-section, .extras-section {
@@ -618,11 +654,19 @@
                 }
             }
 
-            let produtosHTML = produtos.map(produto => `
-                <div class="produto-option" onclick="selecionarProduto(this, ${contador})">
-                    <input type="radio" name="produto-${contador}" value="${produto.nome}" data-preco="${produto.preco}">
-                    <div class="produto-nome">${produto.nome}</div>
-                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                        let produtosHTML = produtos.map(produto => `
+                <div class="produto-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div class="produto-info">
+                            <div class="produto-nome">${produto.nome}</div>
+                            <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                        </div>
+                        <div class="quantidade-controls">
+                            <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', -1)">-</button>
+                            <span class="qty-display" id="qty-${contador}-${produto.nome.replace(/\s+/g, '-')}">0</span>
+                            <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', 1)">+</button>
+                        </div>
+                    </div>
                 </div>
             `).join('');
 
@@ -684,7 +728,7 @@
                     </div>
                 </div>
 
-                <div class="complementos-section">
+                <div class="complementos-section" style="display: none;">
                     <h4>✅ Complementos Disponíveis</h4>
                     <p>Marque os complementos que deseja incluir no seu açaí. Para pedir em dobro, marque a opção extra (+R$1,50).</p>
                     ${complementosHTML}
@@ -705,74 +749,160 @@
                         📋 Gerar Pedido Final
                     </button>
                 </div>
+                
+
             `;
 
             document.getElementById("pedidos-container").appendChild(pedidoDiv);
         }
 
-        function selecionarProduto(elemento, pedidoId) {
-            const pedido = document.getElementById(`pedido-${pedidoId}`);
-            pedido.querySelectorAll('.produto-option').forEach(opt => {
-                opt.classList.remove('selected');
-                opt.querySelector('input[type="radio"]').checked = false;
-            });
-
-            elemento.classList.add('selected');
-            elemento.querySelector('input[type="radio"]').checked = true;
-
-            // Verificar se é balde e ajustar complementos
-            const produtoSelecionado = elemento.querySelector('input[type="radio"]');
-            const produtoNome = produtoSelecionado.value;
-            const complementosSection = pedido.querySelector('.complementos-section');
+        function alterarQuantidade(pedidoId, produtoNome, delta) {
+            const qtyElement = document.getElementById(`qty-${pedidoId}-${produtoNome.replace(/\s+/g, '-')}`);
+            let quantidade = parseInt(qtyElement.textContent) || 0;
             
-            if (produtoNome.toLowerCase().includes('balde')) {
-                // Para baldes, mostrar apenas opção em dobro
-                complementosSection.querySelectorAll('.complemento-item').forEach(item => {
-                    const checkboxIncluso = item.querySelector('input[type="checkbox"].incluso');
-                    const labelIncluso = item.querySelector('label:first-child');
-                    
-                    // Esconder checkbox e label de inclusos
-                    checkboxIncluso.style.display = 'none';
-                    labelIncluso.style.display = 'none';
-                    
-                    // Mostrar apenas opção em dobro
-                    const checkboxDobro = item.querySelector('input[type="checkbox"].dobro');
-                    const labelDobro = item.querySelector('label:last-child');
-                    checkboxDobro.style.display = 'block';
-                    labelDobro.style.display = 'block';
-                });
-                
-                // Atualizar texto da seção
-                const titulo = complementosSection.querySelector('h4');
-                const descricao = complementosSection.querySelector('p');
-                titulo.textContent = '🍫 Complementos Especiais (Em Dobro)';
-                descricao.textContent = 'Para baldes, todos os complementos são adicionais especiais. Marque os que deseja incluir (+R$1,50 cada).';
+            quantidade += delta;
+            if (quantidade < 0) quantidade = 0;
+            
+            qtyElement.textContent = quantidade;
+            
+            // Atualizar visual do card baseado na quantidade
+            const card = qtyElement.closest('.produto-card');
+            if (quantidade > 0) {
+                card.style.border = '3px solid #FFD700';
+                card.style.background = 'rgba(255, 215, 0, 0.1)';
             } else {
-                // Para outros produtos, mostrar opções normais
-                complementosSection.querySelectorAll('.complemento-item').forEach(item => {
-                    const checkboxIncluso = item.querySelector('input[type="checkbox"].incluso');
-                    const labelIncluso = item.querySelector('label:first-child');
-                    const checkboxDobro = item.querySelector('input[type="checkbox"].dobro');
-                    const labelDobro = item.querySelector('label:last-child');
-                    
-                    // Mostrar todas as opções
-                    checkboxIncluso.style.display = 'block';
-                    labelIncluso.style.display = 'block';
-                    checkboxDobro.style.display = 'block';
-                    labelDobro.style.display = 'block';
-                });
+                card.style.border = 'none';
+                card.style.background = 'white';
+            }
+            
+            // Gerenciar seções de complementos individuais
+            gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade);
+        }
+
+                function gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            const produtoId = produtoNome.replace(/\s+/g, '-');
+            const complementosContainer = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            
+            // Remover seções antigas se quantidade for 0
+            if (quantidade === 0) {
+                if (complementosContainer) {
+                    complementosContainer.remove();
+                }
+                return;
+            }
+            
+            // Se não existe container, criar
+            if (!complementosContainer) {
+                const novoContainer = document.createElement('div');
+                novoContainer.id = `complementos-${pedidoId}-${produtoId}`;
+                novoContainer.className = 'complementos-individuais';
+                novoContainer.style.marginTop = '8px';
+                novoContainer.style.padding = '0';
+                novoContainer.style.background = 'transparent';
+                novoContainer.style.border = 'none';
+                novoContainer.style.fontSize = '0.9em';
+                novoContainer.style.display = 'block';
                 
-                // Restaurar texto original
-                const titulo = complementosSection.querySelector('h4');
-                const descricao = complementosSection.querySelector('p');
-                titulo.textContent = '✅ Complementos Disponíveis';
-                descricao.textContent = 'Marque os complementos que deseja incluir no seu açaí. Para pedir em dobro, marque a opção extra (+R$1,50).';
+                const card = document.getElementById(`qty-${pedidoId}-${produtoId}`).closest('.produto-card');
+                // Inserir o container dentro do card do produto, não ao lado
+                card.appendChild(novoContainer);
+            }
+            
+            // Atualizar conteúdo do container
+            const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            const isBalde = produtoNome.toLowerCase().includes('balde');
+            
+            let complementosHTML = '';
+            
+            if (isBalde) {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Adicionais Especiais</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Complementos Inclusos</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Complementos em Dobro</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = complementosHTML;
+        }
+
+        function toggleComplementos(pedidoId, produtoId) {
+            const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            const toggleBtn = container.previousElementSibling.querySelector('button');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#FFD700';
+            } else {
+                container.style.display = 'none';
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#8000BF';
             }
         }
 
         function removerPedido(pedidoId) {
             const pedido = document.getElementById(`pedido-${pedidoId}`);
             pedido.remove();
+        }
+
+        function adicionarMaisProdutos(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            const produtosSection = pedido.querySelector('.produtos-grid');
+            
+            // Criar nova seção de produtos
+            const novaSecao = document.createElement('div');
+            novaSecao.className = 'produtos-grid';
+            novaSecao.style.marginTop = '15px';
+            novaSecao.style.paddingTop = '15px';
+            novaSecao.style.borderTop = '2px solid rgba(255, 215, 0, 0.3)';
+            
+            let produtosHTML = produtos.map(produto => `
+                <div class="produto-option" onclick="selecionarProduto(this, ${pedidoId})">
+                    <input type="checkbox" name="produto-${pedidoId}" value="${produto.nome}" data-preco="${produto.preco}">
+                    <div class="produto-nome">${produto.nome}</div>
+                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                </div>
+            `).join('');
+            
+            novaSecao.innerHTML = produtosHTML;
+            
+            // Inserir após a seção de produtos existente
+            const produtosSectionParent = produtosSection.parentNode;
+            produtosSectionParent.insertBefore(novaSecao, produtosSection.nextSibling);
         }
 
         function gerarPedidoFinal() {
@@ -791,10 +921,34 @@
                 const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
                 const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
                 const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
-                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                // Verificar se há produtos selecionados (quantidade > 0)
+                let produtosInfo = [];
+                let totalProdutos = 0;
+                let temBalde = false;
+                let temProdutos = false;
                 
-                if (!produtoSelecionado) {
-                    alert(`Por favor, selecione um produto para o pedido ${i}`);
+                produtos.forEach(produto => {
+                    const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                    const quantidade = parseInt(qtyElement.textContent) || 0;
+                    
+                    if (quantidade > 0) {
+                        temProdutos = true;
+                        const produtoTotal = produto.preco * quantidade;
+                        produtosInfo.push({ 
+                            nome: produto.nome, 
+                            preco: produto.preco, 
+                            quantidade: quantidade,
+                            total: produtoTotal 
+                        });
+                        totalProdutos += produtoTotal;
+                        if (produto.nome.toLowerCase().includes('balde')) {
+                            temBalde = true;
+                        }
+                    }
+                });
+                
+                if (!temProdutos) {
+                    alert(`Por favor, selecione pelo menos um produto para o pedido ${i}`);
                     return;
                 }
 
@@ -807,29 +961,40 @@
                     alert(`Por favor, informe o endereço para o pedido ${i}`);
                     return;
                 }
-
-                const produtoNome = produtoSelecionado.value;
-                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
-                const isBalde = produtoNome.toLowerCase().includes('balde');
                 
+                // Processar complementos individuais para cada produto
                 const complementosInclusos = [];
                 const complementosDobro = [];
                 
-                if (isBalde) {
-                    // Para baldes, todos os complementos são tratados como extras
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"]:checked').forEach(cb => {
-                        complementosDobro.push(cb.dataset.nome);
-                    });
-                } else {
-                    // Para outros produtos, separar inclusos e em dobro
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
-                        complementosInclusos.push(cb.dataset.nome);
-                    });
-
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
-                        complementosDobro.push(cb.dataset.nome);
-                    });
-                }
+                produtosInfo.forEach(produto => {
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    if (isBalde) {
+                        // Para baldes, todos os complementos são extras
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
+                            if (checkbox && checkbox.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    } else {
+                        // Para outros produtos, separar inclusos e em dobro
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusos.push({ produto: produto.nome, complemento: comp });
+                            }
+                            
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    }
+                });
 
                 const extras = [];
                 pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
@@ -838,27 +1003,45 @@
 
                 const valorDobro = complementosDobro.length * 1.5;
                 const valorExtras = extras.length * 1.5;
-                const subtotal = produtoPreco + valorDobro + valorExtras;
+                const subtotal = totalProdutos + valorDobro + valorExtras;
                 totalGeral += subtotal;
 
                 resumo += `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> *${nome.toUpperCase()}*\n`;
                 resumo += `   🏙️ ${cidade}\n`;
                 resumo += `   📍 ${endereco}\n`;
-                resumo += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
                 
-                if (isBalde) {
-                    if (complementosDobro.length > 0) {
-                        resumo += `   🍫 Complementos: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
-                    }
-                } else {
-                    if (complementosInclusos.length > 0) {
-                        resumo += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
-                    }
+                // Exibir cada produto individualmente com seus adicionais
+                for (let j = 0; j < produtosInfo.length; j++) {
+                    const produto = produtosInfo[j];
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
                     
-                    if (complementosDobro.length > 0) {
-                        resumo += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    // Para cada unidade do produto, mostrar individualmente
+                    for (let k = 0; k < produto.quantidade; k++) {
+                        const numeroProduto = k + 1;
+                        resumo += `   🥤 ${produto.nome} #${numeroProduto} - R$ ${produto.preco.toFixed(2)}\n`;
+                        
+                        // Buscar adicionais específicos para este produto individual
+                        if (isBalde) {
+                            const adicionaisProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            if (adicionaisProduto.length > 0) {
+                                resumo += `      🍫 ${adicionaisProduto.map(item => item.complemento).join(', ')} (+R$ ${(adicionaisProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        } else {
+                            const inclusosProduto = complementosInclusos.filter(item => item.produto === produto.nome);
+                            const dobroProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            
+                            if (inclusosProduto.length > 0) {
+                                resumo += `      ✅ ${inclusosProduto.map(item => item.complemento).join(', ')}\n`;
+                            }
+                            if (dobroProduto.length > 0) {
+                                resumo += `      ➕ ${dobroProduto.map(item => item.complemento).join(', ')} (+R$ ${(dobroProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        }
                     }
                 }
+                
+
                 
                 if (extras.length > 0) {
                     resumo += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
@@ -874,15 +1057,15 @@
             for (let i = 1; i <= contador; i++) {
                 const pedidoElement = document.getElementById(`pedido-${i}`);
                 if (pedidoElement) {
-                    const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                    const produtosSelecionados = pedidoElement.querySelectorAll('input[type="checkbox"]:checked');
                     const cidade = document.getElementById(`cidade-${i}`).value;
                     
-                    if (produtoSelecionado) {
-                        const produtoNome = produtoSelecionado.value;
+                    produtosSelecionados.forEach(produto => {
+                        const produtoNome = produto.value;
                         if (!produtoNome.toLowerCase().includes('balde')) {
                             temProdutoComFrete = true;
                         }
-                    }
+                    });
                     
                     // Verificar se algum cliente é de Whitman
                     if (cidade === 'Whitman') {
@@ -918,7 +1101,7 @@
             document.getElementById("resumo-content").innerHTML = resumoComLogo;
             
             // Criar versão para WhatsApp (apenas texto)
-            let resumoWhatsApp = "🍇 *D&G AÇAÍ BERRY* 🍇\n\n";
+            let resumoWhatsApp = "\n\n*D&G AÇAÍ BERRY*\n\n";
             
             for (let i = 1; i <= contador; i++) {
                 const pedidoElement = document.getElementById(`pedido-${i}`);
@@ -927,18 +1110,29 @@
                 const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
                 const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
                 const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
-                const produtoSelecionado = pedidoElement.querySelector('input[type="radio"]:checked');
+                const produtosSelecionados = pedidoElement.querySelectorAll('input[type="checkbox"]:checked');
                 
-                if (!produtoSelecionado) continue;
+                if (produtosSelecionados.length === 0) continue;
 
-                const produtoNome = produtoSelecionado.value;
-                const produtoPreco = parseFloat(produtoSelecionado.dataset.preco);
-                const isBalde = produtoNome.toLowerCase().includes('balde');
+                // Processar múltiplos produtos para WhatsApp
+                let produtosInfoWhatsApp = [];
+                let totalProdutosWhatsApp = 0;
+                let temBaldeWhatsApp = false;
+                
+                produtosSelecionados.forEach(produto => {
+                    const produtoNome = produto.value;
+                    const produtoPreco = parseFloat(produto.dataset.preco);
+                    produtosInfoWhatsApp.push({ nome: produtoNome, preco: produtoPreco });
+                    totalProdutosWhatsApp += produtoPreco;
+                    if (produtoNome.toLowerCase().includes('balde')) {
+                        temBaldeWhatsApp = true;
+                    }
+                });
                 
                 const complementosInclusos = [];
                 const complementosDobro = [];
                 
-                if (isBalde) {
+                if (temBaldeWhatsApp) {
                     pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"]:checked').forEach(cb => {
                         complementosDobro.push(cb.dataset.nome);
                     });
@@ -959,14 +1153,18 @@
 
                 const valorDobro = complementosDobro.length * 1.5;
                 const valorExtras = extras.length * 1.5;
-                const subtotal = produtoPreco + valorDobro + valorExtras;
+                const subtotal = totalProdutosWhatsApp + valorDobro + valorExtras;
                 
-                resumoWhatsApp += `🍇 *${nome.toUpperCase()}*\n`;
+                resumoWhatsApp += `*${nome.toUpperCase()}*\n`;
                 resumoWhatsApp += `   🏙️ ${cidade}\n`;
                 resumoWhatsApp += `   📍 ${endereco}\n`;
-                resumoWhatsApp += `   🥤 ${produtoNome} - R$ ${produtoPreco.toFixed(2)}\n`;
                 
-                if (isBalde) {
+                // Exibir todos os produtos selecionados
+                produtosInfoWhatsApp.forEach(produto => {
+                    resumoWhatsApp += `   🥤 ${produto.nome} - R$ ${produto.preco.toFixed(2)}\n`;
+                });
+                
+                if (temBaldeWhatsApp) {
                     if (complementosDobro.length > 0) {
                         resumoWhatsApp += `   🍫 Complementos: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
                     }
@@ -986,6 +1184,9 @@
                 
                 resumoWhatsApp += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
             }
+            
+            // Adicionar frase de agradecimento
+            resumoWhatsApp += `*Obrigado por escolher D&G Açaí Berry!*`;
             
             // Usar versão WhatsApp para o link
             const whatsappLink = `https://wa.me/17742577544?text=${encodeURIComponent(resumoWhatsApp)}`;
