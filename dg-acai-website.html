@@ -1057,12 +1057,14 @@
             for (let i = 1; i <= contador; i++) {
                 const pedidoElement = document.getElementById(`pedido-${i}`);
                 if (pedidoElement) {
-                    const produtosSelecionados = pedidoElement.querySelectorAll('input[type="checkbox"]:checked');
                     const cidade = document.getElementById(`cidade-${i}`).value;
                     
-                    produtosSelecionados.forEach(produto => {
-                        const produtoNome = produto.value;
-                        if (!produtoNome.toLowerCase().includes('balde')) {
+                    // Verificar produtos usando o sistema de quantidade
+                    produtos.forEach(produto => {
+                        const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                        const quantidade = parseInt(qtyElement.textContent) || 0;
+                        
+                        if (quantidade > 0 && !produto.nome.toLowerCase().includes('balde')) {
                             temProdutoComFrete = true;
                         }
                     });
@@ -1110,48 +1112,75 @@
                 const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
                 const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
                 const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
-                const produtosSelecionados = pedidoElement.querySelectorAll('input[type="checkbox"]:checked');
                 
-                if (produtosSelecionados.length === 0) continue;
-
-                // Processar múltiplos produtos para WhatsApp
+                // Verificar se há produtos selecionados (quantidade > 0)
                 let produtosInfoWhatsApp = [];
                 let totalProdutosWhatsApp = 0;
                 let temBaldeWhatsApp = false;
+                let temProdutosWhatsApp = false;
                 
-                produtosSelecionados.forEach(produto => {
-                    const produtoNome = produto.value;
-                    const produtoPreco = parseFloat(produto.dataset.preco);
-                    produtosInfoWhatsApp.push({ nome: produtoNome, preco: produtoPreco });
-                    totalProdutosWhatsApp += produtoPreco;
-                    if (produtoNome.toLowerCase().includes('balde')) {
-                        temBaldeWhatsApp = true;
+                produtos.forEach(produto => {
+                    const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                    const quantidade = parseInt(qtyElement.textContent) || 0;
+                    
+                    if (quantidade > 0) {
+                        temProdutosWhatsApp = true;
+                        const produtoTotal = produto.preco * quantidade;
+                        produtosInfoWhatsApp.push({ 
+                            nome: produto.nome, 
+                            preco: produto.preco, 
+                            quantidade: quantidade,
+                            total: produtoTotal 
+                        });
+                        totalProdutosWhatsApp += produtoTotal;
+                        if (produto.nome.toLowerCase().includes('balde')) {
+                            temBaldeWhatsApp = true;
+                        }
                     }
                 });
                 
-                const complementosInclusos = [];
-                const complementosDobro = [];
+                if (!temProdutosWhatsApp) continue;
                 
-                if (temBaldeWhatsApp) {
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"]:checked').forEach(cb => {
-                        complementosDobro.push(cb.dataset.nome);
-                    });
-                } else {
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].incluso:checked').forEach(cb => {
-                        complementosInclusos.push(cb.dataset.nome);
-                    });
-
-                    pedidoElement.querySelectorAll('.complementos-section input[type="checkbox"].dobro:checked').forEach(cb => {
-                        complementosDobro.push(cb.dataset.nome);
-                    });
-                }
+                // Processar complementos individuais para cada produto
+                const complementosInclusosWhatsApp = [];
+                const complementosDobroWhatsApp = [];
+                
+                produtosInfoWhatsApp.forEach(produto => {
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    if (isBalde) {
+                        // Para baldes, todos os complementos são extras
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
+                            if (checkbox && checkbox.checked) {
+                                complementosDobroWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    } else {
+                        // Para outros produtos, separar inclusos e em dobro
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusosWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                            
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobroWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    }
+                });
 
                 const extras = [];
                 pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
                     extras.push(cb.id.split('-').slice(2).join(' '));
                 });
 
-                const valorDobro = complementosDobro.length * 1.5;
+                const valorDobro = complementosDobroWhatsApp.length * 1.5;
                 const valorExtras = extras.length * 1.5;
                 const subtotal = totalProdutosWhatsApp + valorDobro + valorExtras;
                 
@@ -1159,22 +1188,34 @@
                 resumoWhatsApp += `   🏙️ ${cidade}\n`;
                 resumoWhatsApp += `   📍 ${endereco}\n`;
                 
-                // Exibir todos os produtos selecionados
-                produtosInfoWhatsApp.forEach(produto => {
-                    resumoWhatsApp += `   🥤 ${produto.nome} - R$ ${produto.preco.toFixed(2)}\n`;
-                });
-                
-                if (temBaldeWhatsApp) {
-                    if (complementosDobro.length > 0) {
-                        resumoWhatsApp += `   🍫 Complementos: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
-                    }
-                } else {
-                    if (complementosInclusos.length > 0) {
-                        resumoWhatsApp += `   ✅ Inclusos: ${complementosInclusos.join(', ')}\n`;
-                    }
+                // Exibir cada produto individualmente com seus adicionais
+                for (let j = 0; j < produtosInfoWhatsApp.length; j++) {
+                    const produto = produtosInfoWhatsApp[j];
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
                     
-                    if (complementosDobro.length > 0) {
-                        resumoWhatsApp += `   ➕ Dobro: ${complementosDobro.join(', ')} (+R$ ${valorDobro.toFixed(2)})\n`;
+                    // Para cada unidade do produto, mostrar individualmente
+                    for (let k = 0; k < produto.quantidade; k++) {
+                        const numeroProduto = k + 1;
+                        resumoWhatsApp += `   🥤 ${produto.nome} #${numeroProduto} - R$ ${produto.preco.toFixed(2)}\n`;
+                        
+                        // Buscar adicionais específicos para este produto individual
+                        if (isBalde) {
+                            const adicionaisProduto = complementosDobroWhatsApp.filter(item => item.produto === produto.nome);
+                            if (adicionaisProduto.length > 0) {
+                                resumoWhatsApp += `      🍫 ${adicionaisProduto.map(item => item.complemento).join(', ')} (+R$ ${(adicionaisProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        } else {
+                            const inclusosProduto = complementosInclusosWhatsApp.filter(item => item.produto === produto.nome);
+                            const dobroProduto = complementosDobroWhatsApp.filter(item => item.produto === produto.nome);
+                            
+                            if (inclusosProduto.length > 0) {
+                                resumoWhatsApp += `      ✅ ${inclusosProduto.map(item => item.complemento).join(', ')}\n`;
+                            }
+                            if (dobroProduto.length > 0) {
+                                resumoWhatsApp += `      ➕ ${dobroProduto.map(item => item.complemento).join(', ')} (+R$ ${(dobroProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        }
                     }
                 }
                 
