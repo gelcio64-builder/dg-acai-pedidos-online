@@ -3,43 +3,1340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D&G Açaí Berry - Sistema de Pedidos Online</title>
-    <meta http-equiv="refresh" content="0; url=dg-acai-website.html">
+    <title>DG Açaí - Sistema de Pedidos Online</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="DG Açaí - Faça seus pedidos online! Sistema moderno de pedidos de açaí com complementos deliciosos. Delivery via WhatsApp.">
+    <meta name="keywords" content="açaí, delivery, pedidos online, WhatsApp, complementos, leite ninho, granola, banana, morango, paçoca, nutella">
+    <meta name="author" content="DG Açaí">
+    <meta name="robots" content="index, follow">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="DG Açaí - Sistema de Pedidos Online">
+    <meta property="og:description" content="Faça seus pedidos de açaí online! Sistema moderno com complementos deliciosos.">
+    <meta property="og:image" content="https://via.placeholder.com/1200x630/8000BF/FFFFFF?text=DG+Açaí">
+    
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: linear-gradient(135deg, #8000BF, #9B30FF);
             color: white;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
             text-align: center;
+            margin-bottom: 40px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(255, 255, 255, 0.85));
+            padding: 40px 30px;
+            border-radius: 25px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            color: #333;
         }
-        .loading {
-            font-size: 1.2em;
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400"><defs><linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:%238000BF;stop-opacity:0.1" /><stop offset="100%" style="stop-color:%239B30FF;stop-opacity:0.05" /></linearGradient></defs><rect width="100%" height="100%" fill="url(%23grad1)"/><circle cx="1000" cy="80" r="60" fill="%23FFD700" opacity="0.3"/><circle cx="150" cy="320" r="40" fill="%238000BF" opacity="0.2"/><path d="M 200 100 Q 300 50 400 100 T 600 100" stroke="%23FFD700" stroke-width="3" fill="none" opacity="0.4"/></svg>');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.8;
+            z-index: -1;
         }
-        .spinner {
-            border: 4px solid rgba(255, 255, 255, 0.3);
-            border-top: 4px solid #FFD700;
+
+        .header h1 {
+            color: #8000BF;
+            font-size: 3.2em;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 8px rgba(255, 255, 255, 0.8);
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .header p {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 25px;
+            font-weight: 500;
+            text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9);
+        }
+
+        .logo {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 25px;
+            display: block;
             border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
+            box-shadow: 0 12px 35px rgba(128, 0, 191, 0.3);
+            background: linear-gradient(135deg, #FFD700, #FFED4E);
+            padding: 8px;
+            border: 4px solid white;
+            position: relative;
         }
-        @keyframes spin {
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, #8000BF, #9B30FF, #FFD700);
+            border-radius: 50%;
+            z-index: -1;
+            animation: rotate 3s linear infinite;
+        }
+
+        @keyframes rotate {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #8000BF, #9B30FF);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1em;
+            text-decoration: none;
+            display: inline-block;
+            box-shadow: 0 8px 25px rgba(128, 0, 191, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, #9B30FF, #8000BF);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(128, 0, 191, 0.6);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-add {
+            background: #25D366;
+            color: white;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-add:hover {
+            background: #128C7E;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-generate {
+            background: #FF6B35;
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+        }
+
+        .btn-generate:hover {
+            background: #E55A2B;
+            box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ff3742;
+        }
+
+        .btn-success {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #128C7E;
+        }
+
+        .pedido-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .pedido-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .pedido-header h3 {
+            color: #FFD700;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #FFD700;
+            font-size: 1.1em;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #333;
+            font-size: 1em;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+        }
+
+        .produtos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .produto-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+
+        .produto-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .produto-info {
+            flex: 1;
+        }
+
+        .produto-nome {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #8000BF;
+            margin-bottom: 5px;
+        }
+
+        .produto-preco {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #FFD700;
+        }
+
+        .quantidade-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            border-radius: 25px;
+            padding: 5px;
+        }
+
+        .qty-btn {
+            width: 35px;
+            height: 35px;
+            border: none;
+            border-radius: 50%;
+            background: #8000BF;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qty-btn:hover {
+            background: #6000A0;
+            transform: scale(1.1);
+        }
+
+        .qty-btn:active {
+            transform: scale(0.95);
+        }
+
+        .qty-display {
+            min-width: 30px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #8000BF;
+        }
+
+        .complementos-section, .extras-section {
+            margin-top: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            border: 2px solid rgba(255, 215, 0, 0.2);
+        }
+
+        .complementos-section h4, .extras-section h4 {
+            color: #00FF00;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .complementos-section p {
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .complemento-item {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .complemento-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .complemento-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 8px 0;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .complemento-item label:first-child {
+            color: #FFD700;
+            font-weight: bold;
+        }
+
+        .complemento-item label:last-child {
+            color: #FF6B6B;
+            font-size: 0.9em;
+        }
+
+        .complemento-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #00FF00;
+            cursor: pointer;
+        }
+
+        .complemento-item input[type="checkbox"].dobro {
+            accent-color: #FF6B6B;
+        }
+
+        .extras-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .extras-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .extras-item:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .extras-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #FFD700;
+            cursor: pointer;
+        }
+
+        .extras-item label {
+            font-size: 1em;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        #resumo-section {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-top: 40px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        #resumo-section h3 {
+            color: #FFD700;
+            margin-bottom: 25px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        #total-destaque {
+            background: #FFD700;
+            color: #8000BF;
+            padding: 20px;
+            border-radius: 15px;
+            text-align: center;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+        }
+
+        #resumo-content {
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 25px;
+            border-radius: 15px;
+            white-space: pre-line;
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            max-height: 500px;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .whatsapp-btn {
+            background: #25D366;
+            color: white;
+            text-decoration: none;
+            padding: 18px 35px;
+            border-radius: 50px;
+            display: inline-block;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-size: 1.2em;
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.3);
+        }
+
+        .whatsapp-btn:hover {
+            background: #128C7E;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(37, 211, 102, 0.4);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .footer p {
+            margin: 5px 0;
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2.2em;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            }
+            
+            .complementos-grid, .extras-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+            
+            .pedido-card {
+                padding: 20px;
+            }
+            
+            #total-destaque {
+                font-size: 1.5em;
+                padding: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+            
+            .produtos-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .complementos-grid, .extras-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="loading">
-        <div class="spinner"></div>
-        <p>🍇 Carregando D&G Açaí Berry...</p>
-        <p>Redirecionando para o sistema de pedidos...</p>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="dg-acai-logo.png.png" alt="DG Açaí Logo" onerror="this.style.display='none'; this.parentElement.innerHTML='🍇';">
+            </div>
+            <h1>D&G Açaí Berry</h1>
+            <p>Faça Seu Pedido Online</p>
+            <p>Sistema Moderno de Pedidos • Delivery via WhatsApp</p>
+            
+
+        </div>
+
+        <div id="pedidos-container">
+            <!-- Os pedidos serão adicionados aqui dinamicamente -->
+        </div>
+
+        <div id="resumo-section">
+            <h3>📋 Resumo do Pedido</h3>
+            <div id="total-destaque">TOTAL: R$ 0,00</div>
+            <div id="resumo-content"></div>
+            <div style="text-align: center;">
+                <a id="whatsapp-link" href="#" class="whatsapp-btn" target="_blank">
+                    📱 Enviar para WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>📱 Acesse pelo celular para melhor experiência</p>
+            <p><img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 24px; height: 24px; vertical-align: middle; margin-right: 8px; border-radius: 50%;"> Sistema de Pedidos Online</p>
+        </div>
     </div>
+
+    <script>
+        let contador = 0;
+        const produtos = [
+            { nome: "Copo 500ml", preco: 12 },
+            { nome: "Copo 700ml", preco: 15 },
+            { nome: "Marmita Açaí", preco: 22 },
+            { nome: "Barca Açaí", preco: 27 },
+            { nome: "Balde 2kg", preco: 35 },
+            { nome: "Roleta Açaí", preco: 40 }
+        ];
+
+        const complementosInclusos = [
+            "Leite Ninho", "Leite Condensado", "Paçoca", "Granola",
+            "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"
+        ];
+
+        const extras = ["Nutella", "Creme de Ninho"];
+
+        function adicionarPedido() {
+            contador++;
+            const pedidoDiv = document.createElement("div");
+            pedidoDiv.className = "pedido-card";
+            pedidoDiv.id = `pedido-${contador}`;
+            
+            // Preencher automaticamente cidade e endereço do primeiro pedido (se existir)
+            let cidadeAuto = '';
+            let enderecoAuto = '';
+            
+            if (contador > 1) {
+                const primeiroPedido = document.getElementById('pedido-1');
+                if (primeiroPedido) {
+                    const cidadeSelect = primeiroPedido.querySelector('select');
+                    const enderecoInput = primeiroPedido.querySelectorAll('input[type="text"]')[1];
+                    
+                    if (cidadeSelect && cidadeSelect.value) cidadeAuto = cidadeSelect.value;
+                    if (enderecoInput && enderecoInput.value) enderecoAuto = enderecoInput.value;
+                }
+            }
+
+                        let produtosHTML = produtos.map(produto => `
+                <div class="produto-card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <div class="produto-info">
+                            <div class="produto-nome">${produto.nome}</div>
+                            <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                        </div>
+                        <div class="quantidade-controls">
+                            <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', -1)">-</button>
+                            <span class="qty-display" id="qty-${contador}-${produto.nome.replace(/\s+/g, '-')}">0</span>
+                            <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', 1)">+</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            let complementosHTML = complementosInclusos.map(comp => `
+                <div class="complemento-item">
+                    <label>
+                        <input type="checkbox" class="incluso" id="comp-${contador}-${comp}" data-nome="${comp}">
+                        ${comp}
+                    </label>
+                    <label>
+                        <input type="checkbox" class="dobro" id="dobro-${contador}-${comp}" data-nome="${comp}">
+                        Em dobro (+R$1,50)
+                    </label>
+                </div>
+            `).join('');
+
+            let extrasHTML = extras.map(extra => `
+                <div class="extras-item">
+                    <input type="checkbox" id="extra-${contador}-${extra}">
+                    <label for="extra-${contador}-${extra}">${extra}</label>
+                </div>
+            `).join('');
+
+            pedidoDiv.innerHTML = `
+                <div class="pedido-header">
+                    <h3><img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${contador}</h3>
+                    <button class="btn btn-danger" onclick="removerPedido(${contador})">❌ Remover</button>
+                </div>
+                
+                <div class="form-group">
+                    <label>👤 Nome do Cliente *</label>
+                    <input type="text" id="nome-${contador}" placeholder="Digite seu nome" required>
+                </div>
+
+                <div class="form-group">
+                    <label>🏙️ Cidade *</label>
+                    <select id="cidade-${contador}" required>
+                        <option value="">Selecione sua cidade</option>
+                        <option value="Abington" ${cidadeAuto === 'Abington' ? 'selected' : ''}>Abington</option>
+                        <option value="Brockton" ${cidadeAuto === 'Brockton' ? 'selected' : ''}>Brockton</option>
+                        <option value="East Bridgewater" ${cidadeAuto === 'East Bridgewater' ? 'selected' : ''}>East Bridgewater</option>
+                        <option value="Holbrook" ${cidadeAuto === 'Holbrook' ? 'selected' : ''}>Holbrook</option>
+                        <option value="Randolph" ${cidadeAuto === 'Randolph' ? 'selected' : ''}>Randolph</option>
+                        <option value="Rockland" ${cidadeAuto === 'Rockland' ? 'selected' : ''}>Rockland</option>
+                        <option value="Weymouth" ${cidadeAuto === 'Weymouth' ? 'selected' : ''}>Weymouth</option>
+                        <option value="Whitman" ${cidadeAuto === 'Whitman' ? 'selected' : ''}>Whitman</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>📍 Endereço de Entrega *</label>
+                    <input type="text" id="endereco-${contador}" placeholder="Digite seu endereço" value="${enderecoAuto}" required>
+                </div>
+
+                <div class="form-group">
+                    <label>Escolha seu Produto *</label>
+                    <div class="produtos-grid">
+                        ${produtosHTML}
+                    </div>
+                </div>
+
+                <div class="complementos-section" style="display: none;">
+                    <h4>✅ Complementos Disponíveis</h4>
+                    <p>Marque os complementos que deseja incluir no seu açaí. Para pedir em dobro, marque a opção extra (+R$1,50).</p>
+                    ${complementosHTML}
+                </div>
+
+                <div class="extras-section">
+                    <h4>🍫 Extras Especiais (+R$1,50 cada)</h4>
+                    <div class="extras-grid">
+                        ${extrasHTML}
+                    </div>
+                </div>
+                
+                <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 2px solid rgba(255, 215, 0, 0.3);">
+                    <button class="btn btn-add" onclick="adicionarPedido()">
+                        ➕ Adicionar Próximo Pedido
+                    </button>
+                    <button class="btn btn-generate" onclick="gerarPedidoFinal()">
+                        📋 Gerar Pedido Final
+                    </button>
+                </div>
+                
+
+            `;
+
+            document.getElementById("pedidos-container").appendChild(pedidoDiv);
+        }
+
+        function alterarQuantidade(pedidoId, produtoNome, delta) {
+            const qtyElement = document.getElementById(`qty-${pedidoId}-${produtoNome.replace(/\s+/g, '-')}`);
+            let quantidade = parseInt(qtyElement.textContent) || 0;
+            
+            quantidade += delta;
+            if (quantidade < 0) quantidade = 0;
+            
+            qtyElement.textContent = quantidade;
+            
+            // Atualizar visual do card baseado na quantidade
+            const card = qtyElement.closest('.produto-card');
+            if (quantidade > 0) {
+                card.style.border = '3px solid #FFD700';
+                card.style.background = 'rgba(255, 215, 0, 0.1)';
+            } else {
+                card.style.border = 'none';
+                card.style.background = 'white';
+            }
+            
+            // Gerenciar seções de complementos individuais
+            gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade);
+        }
+
+                function gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            const produtoId = produtoNome.replace(/\s+/g, '-');
+            const complementosContainer = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            
+            // Remover seções antigas se quantidade for 0
+            if (quantidade === 0) {
+                if (complementosContainer) {
+                    complementosContainer.remove();
+                }
+                return;
+            }
+            
+            // Se não existe container, criar
+            if (!complementosContainer) {
+                const novoContainer = document.createElement('div');
+                novoContainer.id = `complementos-${pedidoId}-${produtoId}`;
+                novoContainer.className = 'complementos-individuais';
+                novoContainer.style.marginTop = '8px';
+                novoContainer.style.padding = '0';
+                novoContainer.style.background = 'transparent';
+                novoContainer.style.border = 'none';
+                novoContainer.style.fontSize = '0.9em';
+                novoContainer.style.display = 'block';
+                
+                const card = document.getElementById(`qty-${pedidoId}-${produtoId}`).closest('.produto-card');
+                // Inserir o container dentro do card do produto, não ao lado
+                card.appendChild(novoContainer);
+            }
+            
+            // Atualizar conteúdo do container
+            const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            const isBalde = produtoNome.toLowerCase().includes('balde');
+            
+            let complementosHTML = '';
+            
+            if (isBalde) {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Adicionais Especiais</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            } else {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Complementos Inclusos</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Complementos em Dobro</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = complementosHTML;
+        }
+
+        function toggleComplementos(pedidoId, produtoId) {
+            const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
+            const toggleBtn = container.previousElementSibling.querySelector('button');
+            
+            if (container.style.display === 'none') {
+                container.style.display = 'block';
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#FFD700';
+            } else {
+                container.style.display = 'none';
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#8000BF';
+            }
+        }
+
+        function removerPedido(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            if (pedido) {
+                pedido.remove();
+                // Renumerar todos os pedidos restantes
+                renumerarPedidos();
+            }
+        }
+
+        function renumerarPedidos() {
+            const pedidos = document.querySelectorAll('.pedido-card');
+            contador = 0; // Resetar contador
+            
+            pedidos.forEach((pedido, index) => {
+                const novoNumero = index + 1;
+                contador = novoNumero; // Atualizar contador
+                
+                // Atualizar ID do pedido
+                pedido.id = `pedido-${novoNumero}`;
+                
+                // Atualizar título do pedido
+                const titulo = pedido.querySelector('h3');
+                if (titulo) {
+                    titulo.innerHTML = `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${novoNumero}`;
+                }
+                
+                // Atualizar botão remover
+                const btnRemover = pedido.querySelector('.btn-danger');
+                if (btnRemover) {
+                    btnRemover.onclick = () => removerPedido(novoNumero);
+                }
+                
+                // Atualizar IDs dos campos de nome
+                const nomeInput = pedido.querySelector('input[type="text"]');
+                if (nomeInput) {
+                    nomeInput.id = `nome-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos campos de cidade
+                const cidadeSelect = pedido.querySelector('select');
+                if (cidadeSelect) {
+                    cidadeSelect.id = `cidade-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos campos de endereço
+                const enderecoInput = pedido.querySelectorAll('input[type="text"]')[1];
+                if (enderecoInput) {
+                    enderecoInput.id = `endereco-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos produtos
+                produtos.forEach(produto => {
+                    const qtyDisplay = pedido.querySelector(`#qty-${pedido.id.replace('pedido-', '')}-${produto.nome.replace(/\s+/g, '-')}`);
+                    if (qtyDisplay) {
+                        qtyDisplay.id = `qty-${novoNumero}-${produto.nome.replace(/\s+/g, '-')}`;
+                    }
+                    
+                    // Atualizar onclick dos botões de quantidade
+                    const botoesQty = pedido.querySelectorAll('.qty-btn');
+                    botoesQty.forEach((btn, btnIndex) => {
+                        if (btnIndex % 2 === 0) { // Botão menos
+                            btn.onclick = () => alterarQuantidade(novoNumero, produto.nome, -1);
+                        } else { // Botão mais
+                            btn.onclick = () => alterarQuantidade(novoNumero, produto.nome, 1);
+                        }
+                    });
+                });
+                
+                // Atualizar IDs dos complementos
+                complementosInclusos.forEach(comp => {
+                    const checkboxIncluso = pedido.querySelector(`#comp-${pedido.id.replace('pedido-', '')}-${comp}`);
+                    if (checkboxIncluso) {
+                        checkboxIncluso.id = `comp-${novoNumero}-${comp}`;
+                    }
+                    
+                    const checkboxDobro = pedido.querySelector(`#dobro-${pedido.id.replace('pedido-', '')}-${comp}`);
+                    if (checkboxDobro) {
+                        checkboxDobro.id = `dobro-${novoNumero}-${comp}`;
+                    }
+                });
+                
+                // Atualizar IDs dos extras
+                extras.forEach(extra => {
+                    const checkboxExtra = pedido.querySelector(`#extra-${pedido.id.replace('pedido-', '')}-${extra}`);
+                    if (checkboxExtra) {
+                        checkboxExtra.id = `extra-${novoNumero}-${extra}`;
+                    }
+                });
+            });
+        }
+
+        function adicionarMaisProdutos(pedidoId) {
+            const pedido = document.getElementById(`pedido-${pedidoId}`);
+            const produtosSection = pedido.querySelector('.produtos-grid');
+            
+            // Criar nova seção de produtos
+            const novaSecao = document.createElement('div');
+            novaSecao.className = 'produtos-grid';
+            novaSecao.style.marginTop = '15px';
+            novaSecao.style.paddingTop = '15px';
+            novaSecao.style.borderTop = '2px solid rgba(255, 215, 0, 0.3)';
+            
+            let produtosHTML = produtos.map(produto => `
+                <div class="produto-option" onclick="selecionarProduto(this, ${pedidoId})">
+                    <input type="checkbox" name="produto-${pedidoId}" value="${produto.nome}" data-preco="${produto.preco}">
+                    <div class="produto-nome">${produto.nome}</div>
+                    <div class="produto-preco">R$ ${produto.preco.toFixed(2)}</div>
+                </div>
+            `).join('');
+            
+            novaSecao.innerHTML = produtosHTML;
+            
+            // Inserir após a seção de produtos existente
+            const produtosSectionParent = produtosSection.parentNode;
+            produtosSectionParent.insertBefore(novaSecao, produtosSection.nextSibling);
+        }
+
+        function gerarPedidoFinal() {
+            if (contador === 0) {
+                alert("Adicione pelo menos um pedido!");
+                return;
+            }
+
+            let resumo = "*D&G AÇAÍ BERRY*\n\n";
+            let totalGeral = 0;
+
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
+                const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
+                // Verificar se há produtos selecionados (quantidade > 0)
+                let produtosInfo = [];
+                let totalProdutos = 0;
+                let temBalde = false;
+                let temProdutos = false;
+                
+                produtos.forEach(produto => {
+                    const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                    const quantidade = parseInt(qtyElement.textContent) || 0;
+                    
+                    if (quantidade > 0) {
+                        temProdutos = true;
+                        const produtoTotal = produto.preco * quantidade;
+                        produtosInfo.push({ 
+                            nome: produto.nome, 
+                            preco: produto.preco, 
+                            quantidade: quantidade,
+                            total: produtoTotal 
+                        });
+                        totalProdutos += produtoTotal;
+                        if (produto.nome.toLowerCase().includes('balde')) {
+                            temBalde = true;
+                        }
+                    }
+                });
+                
+                if (!temProdutos) {
+                    alert(`Por favor, selecione pelo menos um produto para o pedido ${i}`);
+                    return;
+                }
+
+                if (!cidade || cidade === 'Cidade não informada') {
+                    alert(`Por favor, selecione uma cidade para o pedido ${i}`);
+                    return;
+                }
+
+                if (!endereco || endereco === 'Endereço não informado') {
+                    alert(`Por favor, informe o endereço para o pedido ${i}`);
+                    return;
+                }
+                
+                // Processar complementos individuais para cada produto
+                const complementosInclusos = [];
+                const complementosDobro = [];
+                
+                produtosInfo.forEach(produto => {
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    if (isBalde) {
+                        // Para baldes, todos os complementos são extras
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
+                            if (checkbox && checkbox.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    } else {
+                        // Para outros produtos, separar inclusos e em dobro
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusos.push({ produto: produto.nome, complemento: comp });
+                            }
+                            
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    }
+                });
+
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobro.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = totalProdutos + valorDobro + valorExtras;
+                totalGeral += subtotal;
+
+                resumo += `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;"> *${nome.toUpperCase()}*\n`;
+                resumo += `   🏙️ ${cidade}\n`;
+                resumo += `   📍 ${endereco}\n`;
+                
+                // Exibir cada produto individualmente com seus adicionais
+                for (let j = 0; j < produtosInfo.length; j++) {
+                    const produto = produtosInfo[j];
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    // Para cada unidade do produto, mostrar individualmente
+                    for (let k = 0; k < produto.quantidade; k++) {
+                        const numeroProduto = k + 1;
+                        resumo += `   🥤 ${produto.nome} #${numeroProduto} - R$ ${produto.preco.toFixed(2)}\n`;
+                        
+                        // Buscar adicionais específicos para este produto individual
+                        if (isBalde) {
+                            const adicionaisProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            if (adicionaisProduto.length > 0) {
+                                resumo += `      🍫 ${adicionaisProduto.map(item => item.complemento).join(', ')} (+R$ ${(adicionaisProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        } else {
+                            const inclusosProduto = complementosInclusos.filter(item => item.produto === produto.nome);
+                            const dobroProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            
+                            if (inclusosProduto.length > 0) {
+                                resumo += `      ✅ ${inclusosProduto.map(item => item.complemento).join(', ')}\n`;
+                            }
+                            if (dobroProduto.length > 0) {
+                                resumo += `      ➕ ${dobroProduto.map(item => item.complemento).join(', ')} (+R$ ${(dobroProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        }
+                    }
+                }
+                
+
+                
+                if (extras.length > 0) {
+                    resumo += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumo += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+
+            // Verificar se há produtos que precisam de frete (não são baldes)
+            let temProdutoComFrete = false;
+            let clienteWhitman = false;
+            
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (pedidoElement) {
+                    const cidade = document.getElementById(`cidade-${i}`).value;
+                    
+                    // Verificar produtos usando o sistema de quantidade
+                    produtos.forEach(produto => {
+                        const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                        const quantidade = parseInt(qtyElement.textContent) || 0;
+                        
+                        if (quantidade > 0 && !produto.nome.toLowerCase().includes('balde')) {
+                            temProdutoComFrete = true;
+                        }
+                    });
+                    
+                    // Verificar se algum cliente é de Whitman
+                    if (cidade === 'Whitman') {
+                        clienteWhitman = true;
+                    }
+                }
+            }
+            
+            // Não cobrar frete se cliente for de Whitman
+            const freteFinal = (temProdutoComFrete && !clienteWhitman) ? 5 : 0;
+            const totalComFrete = totalGeral + freteFinal;
+            
+            if (freteFinal > 0) {
+                resumo += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
+            } else if (clienteWhitman) {
+                resumo += `🎉 *FRETE GRÁTIS - Cliente Whitman!*\n`;
+            }
+            resumo += `*TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
+            resumo += `\n\n*Obrigado por escolher D&G Açaí Berry!*`;
+
+            // Criar versão para exibição na tela (com imagens)
+            const resumoComLogo = `<div style="text-align: center; margin-bottom: 20px;">
+                <img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 60px; height: 60px; border-radius: 50%; margin-bottom: 10px;">
+                <div style="font-size: 1.2em; font-weight: bold; color: #8000BF;">D&G AÇAÍ BERRY</div>
+            </div>
+            <div style="text-align: left; font-family: 'Courier New', monospace; font-size: 1em; line-height: 1.6; padding-left: 20px;">
+                ${resumo.replace('*Obrigado por escolher D&G Açaí Berry!*', '').replace('🍇', '<img src="dg-acai-logo.png.png" alt="DG Açaí" style="width: 20px; height: 20px; vertical-align: middle; border-radius: 50%; margin-right: 5px;">')}
+            </div>
+            <div style="text-align: center; margin-top: 20px; font-family: 'Courier New', monospace; font-size: 1.1em; font-weight: bold; color: #8000BF;">
+                *Obrigado por escolher D&G Açaí Berry!*
+            </div>`;
+            
+            document.getElementById("resumo-content").innerHTML = resumoComLogo;
+            
+            // Criar versão para WhatsApp (apenas texto)
+            let resumoWhatsApp = "\n\n*D&G AÇAÍ BERRY*\n\n";
+            
+            for (let i = 1; i <= contador; i++) {
+                const pedidoElement = document.getElementById(`pedido-${i}`);
+                if (!pedidoElement) continue;
+
+                const nome = document.getElementById(`nome-${i}`).value || `Cliente ${i}`;
+                const cidade = document.getElementById(`cidade-${i}`).value || 'Cidade não informada';
+                const endereco = document.getElementById(`endereco-${i}`).value || 'Endereço não informado';
+                
+                // Verificar se há produtos selecionados (quantidade > 0)
+                let produtosInfoWhatsApp = [];
+                let totalProdutosWhatsApp = 0;
+                let temBaldeWhatsApp = false;
+                let temProdutosWhatsApp = false;
+                
+                produtos.forEach(produto => {
+                    const qtyElement = document.getElementById(`qty-${i}-${produto.nome.replace(/\s+/g, '-')}`);
+                    const quantidade = parseInt(qtyElement.textContent) || 0;
+                    
+                    if (quantidade > 0) {
+                        temProdutosWhatsApp = true;
+                        const produtoTotal = produto.preco * quantidade;
+                        produtosInfoWhatsApp.push({ 
+                            nome: produto.nome, 
+                            preco: produto.preco, 
+                            quantidade: quantidade,
+                            total: produtoTotal 
+                        });
+                        totalProdutosWhatsApp += produtoTotal;
+                        if (produto.nome.toLowerCase().includes('balde')) {
+                            temBaldeWhatsApp = true;
+                        }
+                    }
+                });
+                
+                if (!temProdutosWhatsApp) continue;
+                
+                // Processar complementos individuais para cada produto
+                const complementosInclusosWhatsApp = [];
+                const complementosDobroWhatsApp = [];
+                
+                produtosInfoWhatsApp.forEach(produto => {
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    if (isBalde) {
+                        // Para baldes, todos os complementos são extras
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
+                            if (checkbox && checkbox.checked) {
+                                complementosDobroWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    } else {
+                        // Para outros produtos, separar inclusos e em dobro
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusosWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                            
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobroWhatsApp.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    }
+                });
+
+                const extras = [];
+                pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
+                    extras.push(cb.id.split('-').slice(2).join(' '));
+                });
+
+                const valorDobro = complementosDobroWhatsApp.length * 1.5;
+                const valorExtras = extras.length * 1.5;
+                const subtotal = totalProdutosWhatsApp + valorDobro + valorExtras;
+                
+                resumoWhatsApp += `*${nome.toUpperCase()}*\n`;
+                resumoWhatsApp += `   🏙️ ${cidade}\n`;
+                resumoWhatsApp += `   📍 ${endereco}\n`;
+                
+                // Exibir cada produto individualmente com seus adicionais
+                for (let j = 0; j < produtosInfoWhatsApp.length; j++) {
+                    const produto = produtosInfoWhatsApp[j];
+                    const produtoId = produto.nome.replace(/\s+/g, '-');
+                    const isBalde = produto.nome.toLowerCase().includes('balde');
+                    
+                    // Para cada unidade do produto, mostrar individualmente
+                    for (let k = 0; k < produto.quantidade; k++) {
+                        const numeroProduto = k + 1;
+                        resumoWhatsApp += `   🥤 ${produto.nome} #${numeroProduto} - R$ ${produto.preco.toFixed(2)}\n`;
+                        
+                        // Buscar adicionais específicos para este produto individual
+                        if (isBalde) {
+                            const adicionaisProduto = complementosDobroWhatsApp.filter(item => item.produto === produto.nome);
+                            if (adicionaisProduto.length > 0) {
+                                resumoWhatsApp += `      🍫 ${adicionaisProduto.map(item => item.complemento).join(', ')} (+R$ ${(adicionaisProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        } else {
+                            const inclusosProduto = complementosInclusosWhatsApp.filter(item => item.produto === produto.nome);
+                            const dobroProduto = complementosDobroWhatsApp.filter(item => item.produto === produto.nome);
+                            
+                            if (inclusosProduto.length > 0) {
+                                resumoWhatsApp += `      ✅ ${inclusosProduto.map(item => item.complemento).join(', ')}\n`;
+                            }
+                            if (dobroProduto.length > 0) {
+                                resumoWhatsApp += `      ➕ ${dobroProduto.map(item => item.complemento).join(', ')} (+R$ ${(dobroProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        }
+                    }
+                }
+                
+                if (extras.length > 0) {
+                    resumoWhatsApp += `   🍫 Extras: ${extras.join(', ')} (+R$ ${valorExtras.toFixed(2)})\n`;
+                }
+                
+                resumoWhatsApp += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
+            }
+            
+            // Adicionar total geral e frase de agradecimento
+            if (freteFinal > 0) {
+                resumoWhatsApp += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
+            } else if (clienteWhitman) {
+                resumoWhatsApp += `🎉 *FRETE GRÁTIS - Cliente Whitman!*\n`;
+            }
+            resumoWhatsApp += `*TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
+            resumoWhatsApp += `*Obrigado por escolher D&G Açaí Berry!*`;
+            
+            // Usar versão WhatsApp para o link
+            const whatsappLink = `https://wa.me/17742577544?text=${encodeURIComponent(resumoWhatsApp)}`;
+            document.getElementById("whatsapp-link").href = whatsappLink;
+            document.getElementById("total-destaque").textContent = `TOTAL: R$ ${totalComFrete.toFixed(2)}`;
+            
+            document.getElementById("resumo-section").style.display = "block";
+            document.getElementById("resumo-section").scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Adicionar primeiro pedido automaticamente
+        window.onload = function() {
+            adicionarPedido();
+        };
+
+        // Prevenir zoom em inputs no iOS
+        document.addEventListener('touchstart', function() {}, {passive: true});
+    </script>
 </body>
 </html> 
