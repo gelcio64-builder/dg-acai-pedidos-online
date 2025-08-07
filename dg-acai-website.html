@@ -876,7 +876,93 @@
 
         function removerPedido(pedidoId) {
             const pedido = document.getElementById(`pedido-${pedidoId}`);
-            pedido.remove();
+            if (pedido) {
+                pedido.remove();
+                // Renumerar todos os pedidos restantes
+                renumerarPedidos();
+            }
+        }
+
+        function renumerarPedidos() {
+            const pedidos = document.querySelectorAll('.pedido-card');
+            contador = 0; // Resetar contador
+            
+            pedidos.forEach((pedido, index) => {
+                const novoNumero = index + 1;
+                contador = novoNumero; // Atualizar contador
+                
+                // Atualizar ID do pedido
+                pedido.id = `pedido-${novoNumero}`;
+                
+                // Atualizar título do pedido
+                const titulo = pedido.querySelector('h3');
+                if (titulo) {
+                    titulo.innerHTML = `<img src="dg-acai-logo.png.png" alt="D&G Açaí Berry" style="width: 32px; height: 32px; vertical-align: middle; margin-right: 10px; border-radius: 50%;"> Pedido ${novoNumero}`;
+                }
+                
+                // Atualizar botão remover
+                const btnRemover = pedido.querySelector('.btn-danger');
+                if (btnRemover) {
+                    btnRemover.onclick = () => removerPedido(novoNumero);
+                }
+                
+                // Atualizar IDs dos campos de nome
+                const nomeInput = pedido.querySelector('input[type="text"]');
+                if (nomeInput) {
+                    nomeInput.id = `nome-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos campos de cidade
+                const cidadeSelect = pedido.querySelector('select');
+                if (cidadeSelect) {
+                    cidadeSelect.id = `cidade-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos campos de endereço
+                const enderecoInput = pedido.querySelectorAll('input[type="text"]')[1];
+                if (enderecoInput) {
+                    enderecoInput.id = `endereco-${novoNumero}`;
+                }
+                
+                // Atualizar IDs dos produtos
+                produtos.forEach(produto => {
+                    const qtyDisplay = pedido.querySelector(`#qty-${pedido.id.replace('pedido-', '')}-${produto.nome.replace(/\s+/g, '-')}`);
+                    if (qtyDisplay) {
+                        qtyDisplay.id = `qty-${novoNumero}-${produto.nome.replace(/\s+/g, '-')}`;
+                    }
+                    
+                    // Atualizar onclick dos botões de quantidade
+                    const botoesQty = pedido.querySelectorAll('.qty-btn');
+                    botoesQty.forEach((btn, btnIndex) => {
+                        if (btnIndex % 2 === 0) { // Botão menos
+                            btn.onclick = () => alterarQuantidade(novoNumero, produto.nome, -1);
+                        } else { // Botão mais
+                            btn.onclick = () => alterarQuantidade(novoNumero, produto.nome, 1);
+                        }
+                    });
+                });
+                
+                // Atualizar IDs dos complementos
+                complementosInclusos.forEach(comp => {
+                    const checkboxIncluso = pedido.querySelector(`#comp-${pedido.id.replace('pedido-', '')}-${comp}`);
+                    if (checkboxIncluso) {
+                        checkboxIncluso.id = `comp-${novoNumero}-${comp}`;
+                    }
+                    
+                    const checkboxDobro = pedido.querySelector(`#dobro-${pedido.id.replace('pedido-', '')}-${comp}`);
+                    if (checkboxDobro) {
+                        checkboxDobro.id = `dobro-${novoNumero}-${comp}`;
+                    }
+                });
+                
+                // Atualizar IDs dos extras
+                extras.forEach(extra => {
+                    const checkboxExtra = pedido.querySelector(`#extra-${pedido.id.replace('pedido-', '')}-${extra}`);
+                    if (checkboxExtra) {
+                        checkboxExtra.id = `extra-${novoNumero}-${extra}`;
+                    }
+                });
+            });
         }
 
         function adicionarMaisProdutos(pedidoId) {
@@ -1226,7 +1312,13 @@
                 resumoWhatsApp += `   💰 Subtotal: R$ ${subtotal.toFixed(2)}\n\n`;
             }
             
-            // Adicionar frase de agradecimento
+            // Adicionar total geral e frase de agradecimento
+            if (freteFinal > 0) {
+                resumoWhatsApp += `🚚 *FRETE: R$ ${freteFinal.toFixed(2)}*\n`;
+            } else if (clienteWhitman) {
+                resumoWhatsApp += `🎉 *FRETE GRÁTIS - Cliente Whitman!*\n`;
+            }
+            resumoWhatsApp += `*TOTAL GERAL: R$ ${totalComFrete.toFixed(2)}*\n\n`;
             resumoWhatsApp += `*Obrigado por escolher D&G Açaí Berry!*`;
             
             // Usar versão WhatsApp para o link
