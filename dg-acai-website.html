@@ -836,7 +836,7 @@
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
                             ${complementosInclusos.map(comp => `
                                 <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" class="incluso" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
                                     <span style="color: #FFD700;">${comp}</span>
                                 </label>
                             `).join('')}
@@ -847,7 +847,7 @@
                         <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
                             ${complementosInclusos.map(comp => `
                                 <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" class="dobro" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
                                     <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
                                 </label>
                             `).join('')}
