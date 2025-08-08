@@ -665,7 +665,6 @@
                             <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', -1)">-</button>
                             <span class="qty-display" id="qty-${contador}-${produto.nome.replace(/\s+/g, '-')}">0</span>
                             <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', 1)">+</button>
-                            <button class="qty-btn" onclick="toggleComplementos(${contador}, '${produto.nome.replace(/\s+/g, '-')}')" style="background: #FFD700; color: #8000BF; font-size: 14px; margin-left: 5px;" title="Configurar complementos">⚙️</button>
                         </div>
                     </div>
                 </div>
@@ -793,7 +792,7 @@
                 return;
             }
             
-            // Se não existe container, criar (mas não expandir automaticamente)
+            // Se não existe container, criar
             if (!complementosContainer) {
                 const novoContainer = document.createElement('div');
                 novoContainer.id = `complementos-${pedidoId}-${produtoId}`;
@@ -803,7 +802,7 @@
                 novoContainer.style.background = 'transparent';
                 novoContainer.style.border = 'none';
                 novoContainer.style.fontSize = '0.9em';
-                novoContainer.style.display = 'none'; // Inicialmente oculto
+                novoContainer.style.display = 'block';
                 
                 const card = document.getElementById(`qty-${pedidoId}-${produtoId}`).closest('.produto-card');
                 // Inserir o container dentro do card do produto, não ao lado
@@ -816,48 +815,45 @@
             
             let complementosHTML = '';
             
-            // Criar seções para cada unidade do produto
-            for (let unidade = 0; unidade < quantidade; unidade++) {
-                const numeroUnidade = unidade + 1;
-                
-                if (isBalde) {
-                    complementosHTML += `
-                        <div class="form-group" style="margin-bottom: 8px; border: 1px solid rgba(255,215,0,0.3); padding: 8px; border-radius: 6px;">
-                            <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Unidade #${numeroUnidade} - Adicionais Especiais</label>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                                ${complementosInclusos.map(comp => `
-                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                        <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}-${unidade}" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
-                                        <span style="color: #FFD700;">${comp}</span>
-                                    </label>
-                                `).join('')}
-                            </div>
+            if (isBalde) {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Adicionais Especiais</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
                         </div>
-                    `;
-                } else {
-                    complementosHTML += `
-                        <div class="form-group" style="margin-bottom: 8px; border: 1px solid rgba(255,215,0,0.3); padding: 8px; border-radius: 6px;">
-                            <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Unidade #${numeroUnidade} - Complementos Inclusos</label>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                                ${complementosInclusos.map(comp => `
-                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                        <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}-${unidade}" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
-                                        <span style="color: #FFD700;">${comp}</span>
-                                    </label>
-                                `).join('')}
-                            </div>
-                            <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Unidade #${numeroUnidade} - Complementos em Dobro</label>
-                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                                ${complementosInclusos.map(comp => `
-                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                        <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}-${unidade}" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
-                                        <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
-                                    </label>
-                                `).join('')}
-                            </div>
+                    </div>
+                `;
+            } else {
+                complementosHTML = `
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Complementos Inclusos</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FFD700;">${comp}</span>
+                                </label>
+                            `).join('')}
                         </div>
-                    `;
-                }
+                    </div>
+                    <div class="form-group" style="margin-bottom: 8px;">
+                        <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Complementos em Dobro</label>
+                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                            ${complementosInclusos.map(comp => `
+                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
+                                    <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
             }
             
             container.innerHTML = complementosHTML;
@@ -865,23 +861,16 @@
 
         function toggleComplementos(pedidoId, produtoId) {
             const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
-            if (!container) return;
+            const toggleBtn = container.previousElementSibling.querySelector('button');
             
-            const qtyElement = document.getElementById(`qty-${pedidoId}-${produtoId}`);
-            const quantidade = parseInt(qtyElement.textContent) || 0;
-            
-            if (quantidade === 0) {
-                alert('Adicione pelo menos uma unidade para configurar complementos');
-                return;
-            }
-            
-            if (container.style.display === 'none' || container.style.display === '') {
+            if (container.style.display === 'none') {
                 container.style.display = 'block';
-                // Atualizar o conteúdo se necessário
-                const produtoNome = produtoId.replace(/-/g, ' ');
-                gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade);
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#FFD700';
             } else {
                 container.style.display = 'none';
+                toggleBtn.innerHTML = '⚙️';
+                toggleBtn.style.color = '#8000BF';
             }
         }
 
@@ -1060,46 +1049,36 @@
                 }
                 
                 // Processar complementos individuais para cada produto
-                let produtosComplementos = {};
+                const complementosInclusos = [];
+                const complementosDobro = [];
                 
                 produtosInfo.forEach(produto => {
                     const produtoId = produto.nome.replace(/\s+/g, '-');
                     const isBalde = produto.nome.toLowerCase().includes('balde');
                     
-                    // Inicializar array para cada unidade do produto
-                    produtosComplementos[produto.nome] = [];
-                    
-                    for (let unidade = 0; unidade < produto.quantidade; unidade++) {
-                        produtosComplementos[produto.nome][unidade] = {
-                            inclusos: [],
-                            dobro: [],
-                            extras: []
-                        };
-                        
-                        if (isBalde) {
-                            // Para baldes, todos os complementos são extras
-                            const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                            complementosDisponiveis.forEach(comp => {
-                                const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}-${unidade}`);
-                                if (checkbox && checkbox.checked) {
-                                    produtosComplementos[produto.nome][unidade].extras.push(comp);
-                                }
-                            });
-                        } else {
-                            // Para outros produtos, separar inclusos e em dobro
-                            const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                            complementosDisponiveis.forEach(comp => {
-                                const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}-${unidade}`);
-                                if (checkboxIncluso && checkboxIncluso.checked) {
-                                    produtosComplementos[produto.nome][unidade].inclusos.push(comp);
-                                }
-                                
-                                const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}-${unidade}`);
-                                if (checkboxDobro && checkboxDobro.checked) {
-                                    produtosComplementos[produto.nome][unidade].dobro.push(comp);
-                                }
-                            });
-                        }
+                    if (isBalde) {
+                        // Para baldes, todos os complementos são extras
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
+                            if (checkbox && checkbox.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
+                    } else {
+                        // Para outros produtos, separar inclusos e em dobro
+                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusos.push({ produto: produto.nome, complemento: comp });
+                            }
+                            
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            }
+                        });
                     }
                 });
 
@@ -1109,13 +1088,7 @@
                 });
 
                 // Calcular valores dos complementos
-                let valorComplementosDobro = 0;
-                Object.values(produtosComplementos).forEach(unidades => {
-                    unidades.forEach(complementos => {
-                        valorComplementosDobro += complementos.dobro.length * 1.5;
-                        valorComplementosDobro += complementos.extras.length * 1.5;
-                    });
-                });
+                const valorDobro = complementosDobro.length * 1.5;
                 
                 const valorExtras = extras.length * 1.5;
                 const subtotal = totalProdutos + valorComplementosDobro + valorExtras;
@@ -1136,20 +1109,21 @@
                         const numeroProduto = k + 1;
                         resumo += `   🥤 ${produto.nome} #${numeroProduto} - R$ ${produto.preco.toFixed(2)}\n`;
                         
-                        // Buscar complementos específicos para esta unidade específica
-                        const complementosUnidade = produtosComplementos[produto.nome][k];
-                        if (complementosUnidade) {
-                            if (isBalde) {
-                                if (complementosUnidade.extras.length > 0) {
-                                    resumo += `      🍫 ${complementosUnidade.extras.join(', ')}\n`;
-                                }
-                            } else {
-                                if (complementosUnidade.inclusos.length > 0) {
-                                    resumo += `      ✅ ${complementosUnidade.inclusos.join(', ')}\n`;
-                                }
-                                if (complementosUnidade.dobro.length > 0) {
-                                    resumo += `      ➕ ${complementosUnidade.dobro.join(', ')}\n`;
-                                }
+                        // Buscar adicionais específicos para este produto individual
+                        if (isBalde) {
+                            const adicionaisProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            if (adicionaisProduto.length > 0) {
+                                resumo += `      🍫 ${adicionaisProduto.map(item => item.complemento).join(', ')} (+R$ ${(adicionaisProduto.length * 1.5).toFixed(2)})\n`;
+                            }
+                        } else {
+                            const inclusosProduto = complementosInclusos.filter(item => item.produto === produto.nome);
+                            const dobroProduto = complementosDobro.filter(item => item.produto === produto.nome);
+                            
+                            if (inclusosProduto.length > 0) {
+                                resumo += `      ✅ ${inclusosProduto.map(item => item.complemento).join(', ')}\n`;
+                            }
+                            if (dobroProduto.length > 0) {
+                                resumo += `      ➕ ${dobroProduto.map(item => item.complemento).join(', ')} (+R$ ${(dobroProduto.length * 1.5).toFixed(2)})\n`;
                             }
                         }
                     }
