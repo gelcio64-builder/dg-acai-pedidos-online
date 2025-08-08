@@ -1056,30 +1056,27 @@
                     const produtoId = produto.nome.replace(/\s+/g, '-');
                     const isBalde = produto.nome.toLowerCase().includes('balde');
                     
-                    if (isBalde) {
-                        // Para baldes, todos os complementos são extras
-                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                        complementosDisponiveis.forEach(comp => {
-                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
-                            if (checkbox && checkbox.checked) {
-                                complementosDobro.push({ produto: produto.nome, complemento: comp });
+                    // Buscar complementos específicos para este produto
+                    const complementosProduto = pedidoElement.querySelectorAll(`#complementos-${i}-${produtoId} input[type="checkbox"]:checked`);
+                    
+                    complementosProduto.forEach(checkbox => {
+                        const compNome = checkbox.dataset.nome;
+                        const isIncluso = checkbox.classList.contains('incluso');
+                        const isDobro = checkbox.classList.contains('dobro');
+                        
+                        if (isBalde) {
+                            // Para baldes, todos os complementos são extras
+                            complementosDobro.push({ produto: produto.nome, complemento: compNome });
+                        } else {
+                            // Para outros produtos, separar inclusos e em dobro
+                            if (isIncluso) {
+                                complementosInclusos.push({ produto: produto.nome, complemento: compNome });
                             }
-                        });
-                    } else {
-                        // Para outros produtos, separar inclusos e em dobro
-                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                        complementosDisponiveis.forEach(comp => {
-                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
-                            if (checkboxIncluso && checkboxIncluso.checked) {
-                                complementosInclusos.push({ produto: produto.nome, complemento: comp });
+                            if (isDobro) {
+                                complementosDobro.push({ produto: produto.nome, complemento: compNome });
                             }
-                            
-                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
-                            if (checkboxDobro && checkboxDobro.checked) {
-                                complementosDobro.push({ produto: produto.nome, complemento: comp });
-                            }
-                        });
-                    }
+                        }
+                    });
                 });
 
                 const extras = [];
