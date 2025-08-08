@@ -763,6 +763,12 @@
             quantidade += delta;
             if (quantidade < 0) quantidade = 0;
             
+            // Limitar quantidade para todos os produtos exceto balde
+            const isBalde = produtoNome.toLowerCase().includes('balde');
+            if (!isBalde && quantidade > 5) {
+                quantidade = 5;
+            }
+            
             qtyElement.textContent = quantidade;
             
             // Atualizar visual do card baseado na quantidade
