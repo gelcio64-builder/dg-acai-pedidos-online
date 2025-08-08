@@ -665,6 +665,7 @@
                             <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', -1)">-</button>
                             <span class="qty-display" id="qty-${contador}-${produto.nome.replace(/\s+/g, '-')}">0</span>
                             <button class="qty-btn" onclick="alterarQuantidade(${contador}, '${produto.nome}', 1)">+</button>
+                            <button class="qty-btn" onclick="toggleComplementos(${contador}, '${produto.nome.replace(/\s+/g, '-')}')" style="background: #FFD700; color: #8000BF; font-size: 14px; margin-left: 5px;" title="Configurar complementos">⚙️</button>
                         </div>
                     </div>
                 </div>
@@ -792,7 +793,7 @@
                 return;
             }
             
-            // Se não existe container, criar
+            // Se não existe container, criar (mas não expandir automaticamente)
             if (!complementosContainer) {
                 const novoContainer = document.createElement('div');
                 novoContainer.id = `complementos-${pedidoId}-${produtoId}`;
@@ -802,7 +803,7 @@
                 novoContainer.style.background = 'transparent';
                 novoContainer.style.border = 'none';
                 novoContainer.style.fontSize = '0.9em';
-                novoContainer.style.display = 'block';
+                novoContainer.style.display = 'none'; // Inicialmente oculto
                 
                 const card = document.getElementById(`qty-${pedidoId}-${produtoId}`).closest('.produto-card');
                 // Inserir o container dentro do card do produto, não ao lado
@@ -864,16 +865,23 @@
 
         function toggleComplementos(pedidoId, produtoId) {
             const container = document.getElementById(`complementos-${pedidoId}-${produtoId}`);
-            const toggleBtn = container.previousElementSibling.querySelector('button');
+            if (!container) return;
             
-            if (container.style.display === 'none') {
+            const qtyElement = document.getElementById(`qty-${pedidoId}-${produtoId}`);
+            const quantidade = parseInt(qtyElement.textContent) || 0;
+            
+            if (quantidade === 0) {
+                alert('Adicione pelo menos uma unidade para configurar complementos');
+                return;
+            }
+            
+            if (container.style.display === 'none' || container.style.display === '') {
                 container.style.display = 'block';
-                toggleBtn.innerHTML = '⚙️';
-                toggleBtn.style.color = '#FFD700';
+                // Atualizar o conteúdo se necessário
+                const produtoNome = produtoId.replace(/-/g, ' ');
+                gerenciarComplementosIndividuais(pedidoId, produtoNome, quantidade);
             } else {
                 container.style.display = 'none';
-                toggleBtn.innerHTML = '⚙️';
-                toggleBtn.style.color = '#8000BF';
             }
         }
 
