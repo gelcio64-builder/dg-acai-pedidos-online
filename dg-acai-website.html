@@ -1063,15 +1063,27 @@
                         const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
                         const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
                         
+                        // Debug: verificar se os checkboxes existem e estão marcados
+                        console.log(`Produto: ${produto.nome}, Complemento: ${comp}`);
+                        console.log(`Checkbox incluso:`, checkboxIncluso);
+                        console.log(`Checkbox incluso checked:`, checkboxIncluso ? checkboxIncluso.checked : 'não existe');
+                        console.log(`Checkbox dobro:`, checkboxDobro);
+                        console.log(`Checkbox dobro checked:`, checkboxDobro ? checkboxDobro.checked : 'não existe');
+                        
                         if (checkboxIncluso && checkboxIncluso.checked) {
                             complementosInclusos.push({ produto: produto.nome, complemento: comp });
+                            console.log(`Adicionado inclusos: ${comp} para ${produto.nome}`);
                         }
                         
                         if (checkboxDobro && checkboxDobro.checked) {
                             complementosDobro.push({ produto: produto.nome, complemento: comp });
+                            console.log(`Adicionado dobro: ${comp} para ${produto.nome}`);
                         }
                     });
                 });
+                
+                console.log('Complementos inclusos:', complementosInclusos);
+                console.log('Complementos dobro:', complementosDobro);
 
                 const extras = [];
                 pedidoElement.querySelectorAll('.extras-section input[type="checkbox"]:checked').forEach(cb => {
