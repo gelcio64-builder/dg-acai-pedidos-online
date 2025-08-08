@@ -1056,28 +1056,18 @@
                     const produtoId = produto.nome.replace(/\s+/g, '-');
                     const isBalde = produto.nome.toLowerCase().includes('balde');
                     
-                    if (isBalde) {
-                        // Para baldes, todos os complementos são extras
-                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                        complementosDisponiveis.forEach(comp => {
-                            const checkbox = document.getElementById(`adicionais-${i}-${produtoId}-${comp}`);
-                            if (checkbox && checkbox.checked) {
-                                complementosDobro.push({ produto: produto.nome, complemento: comp });
-                            }
+                    // Buscar complementos específicos para este produto específico
+                    const complementosContainer = document.getElementById(`complementos-${i}-${produtoId}`);
+                    if (complementosContainer) {
+                        const checkboxesInclusos = complementosContainer.querySelectorAll('input[type="checkbox"].incluso:checked');
+                        const checkboxesDobro = complementosContainer.querySelectorAll('input[type="checkbox"].dobro:checked');
+                        
+                        checkboxesInclusos.forEach(checkbox => {
+                            complementosInclusos.push({ produto: produto.nome, complemento: checkbox.dataset.nome });
                         });
-                    } else {
-                        // Para outros produtos, separar inclusos e em dobro
-                        const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
-                        complementosDisponiveis.forEach(comp => {
-                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
-                            if (checkboxIncluso && checkboxIncluso.checked) {
-                                complementosInclusos.push({ produto: produto.nome, complemento: comp });
-                            }
-                            
-                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
-                            if (checkboxDobro && checkboxDobro.checked) {
-                                complementosDobro.push({ produto: produto.nome, complemento: comp });
-                            }
+                        
+                        checkboxesDobro.forEach(checkbox => {
+                            complementosDobro.push({ produto: produto.nome, complemento: checkbox.dataset.nome });
                         });
                     }
                 });
