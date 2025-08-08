@@ -815,45 +815,48 @@
             
             let complementosHTML = '';
             
-            if (isBalde) {
-                complementosHTML = `
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Adicionais Especiais</label>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                            ${complementosInclusos.map(comp => `
-                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                    <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
-                                    <span style="color: #FFD700;">${comp}</span>
-                                </label>
-                            `).join('')}
+            // Criar seções para cada unidade do produto
+            for (let unidade = 0; unidade < quantidade; unidade++) {
+                const numeroUnidade = unidade + 1;
+                
+                if (isBalde) {
+                    complementosHTML += `
+                        <div class="form-group" style="margin-bottom: 8px; border: 1px solid rgba(255,215,0,0.3); padding: 8px; border-radius: 6px;">
+                            <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">🍫 Unidade #${numeroUnidade} - Adicionais Especiais</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                                ${complementosInclusos.map(comp => `
+                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                        <input type="checkbox" id="adicionais-${pedidoId}-${produtoId}-${comp}-${unidade}" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
+                                        <span style="color: #FFD700;">${comp}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
                         </div>
-                    </div>
-                `;
-            } else {
-                complementosHTML = `
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Complementos Inclusos</label>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                            ${complementosInclusos.map(comp => `
-                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                    <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}" class="incluso" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
-                                    <span style="color: #FFD700;">${comp}</span>
-                                </label>
-                            `).join('')}
+                    `;
+                } else {
+                    complementosHTML += `
+                        <div class="form-group" style="margin-bottom: 8px; border: 1px solid rgba(255,215,0,0.3); padding: 8px; border-radius: 6px;">
+                            <label style="color: #FFD700; font-size: 0.9em; margin-bottom: 5px;">✅ Unidade #${numeroUnidade} - Complementos Inclusos</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                                ${complementosInclusos.map(comp => `
+                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                        <input type="checkbox" id="inclusos-${pedidoId}-${produtoId}-${comp}-${unidade}" class="incluso" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
+                                        <span style="color: #FFD700;">${comp}</span>
+                                    </label>
+                                `).join('')}
+                            </div>
+                            <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Unidade #${numeroUnidade} - Complementos em Dobro</label>
+                            <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
+                                ${complementosInclusos.map(comp => `
+                                    <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
+                                        <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}-${unidade}" class="dobro" data-nome="${comp}" data-produto="${produtoNome}" data-unidade="${unidade}" style="width: 14px; height: 14px;">
+                                        <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
+                                    </label>
+                                `).join('')}
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group" style="margin-bottom: 8px;">
-                        <label style="color: #FF6B6B; font-size: 0.9em; margin-bottom: 5px;">➕ Complementos em Dobro</label>
-                        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;">
-                            ${complementosInclusos.map(comp => `
-                                <label style="display: flex; align-items: center; gap: 5px; background: rgba(255,255,255,0.1); padding: 6px; border-radius: 4px; font-size: 0.8em; cursor: pointer;">
-                                    <input type="checkbox" id="dobro-${pedidoId}-${produtoId}-${comp}" class="dobro" data-nome="${comp}" data-produto="${produtoNome}" style="width: 14px; height: 14px;">
-                                    <span style="color: #FF6B6B;">${comp} (+R$1,50)</span>
-                                </label>
-                            `).join('')}
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             }
             
             container.innerHTML = complementosHTML;
@@ -1059,27 +1062,30 @@
                     // Buscar complementos específicos para este produto específico usando IDs únicos
                     const complementosDisponiveis = ["Leite Ninho", "Leite Condensado", "Paçoca", "Granola", "Amendoim", "Banana", "Uva", "Morango", "Sucrilhos"];
                     
-                    complementosDisponiveis.forEach(comp => {
-                        const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}`);
-                        const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}`);
-                        
-                        // Debug: verificar se os checkboxes existem e estão marcados
-                        console.log(`Produto: ${produto.nome}, Complemento: ${comp}`);
-                        console.log(`Checkbox incluso:`, checkboxIncluso);
-                        console.log(`Checkbox incluso checked:`, checkboxIncluso ? checkboxIncluso.checked : 'não existe');
-                        console.log(`Checkbox dobro:`, checkboxDobro);
-                        console.log(`Checkbox dobro checked:`, checkboxDobro ? checkboxDobro.checked : 'não existe');
-                        
-                        if (checkboxIncluso && checkboxIncluso.checked) {
-                            complementosInclusos.push({ produto: produto.nome, complemento: comp });
-                            console.log(`Adicionado inclusos: ${comp} para ${produto.nome}`);
-                        }
-                        
-                        if (checkboxDobro && checkboxDobro.checked) {
-                            complementosDobro.push({ produto: produto.nome, complemento: comp });
-                            console.log(`Adicionado dobro: ${comp} para ${produto.nome}`);
-                        }
-                    });
+                    // Para cada unidade do produto, verificar complementos individuais
+                    for (let unidade = 0; unidade < produto.quantidade; unidade++) {
+                        complementosDisponiveis.forEach(comp => {
+                            const checkboxIncluso = document.getElementById(`inclusos-${i}-${produtoId}-${comp}-${unidade}`);
+                            const checkboxDobro = document.getElementById(`dobro-${i}-${produtoId}-${comp}-${unidade}`);
+                            
+                            // Debug: verificar se os checkboxes existem e estão marcados
+                            console.log(`Produto: ${produto.nome} #${unidade + 1}, Complemento: ${comp}`);
+                            console.log(`Checkbox incluso:`, checkboxIncluso);
+                            console.log(`Checkbox incluso checked:`, checkboxIncluso ? checkboxIncluso.checked : 'não existe');
+                            console.log(`Checkbox dobro:`, checkboxDobro);
+                            console.log(`Checkbox dobro checked:`, checkboxDobro ? checkboxDobro.checked : 'não existe');
+                            
+                            if (checkboxIncluso && checkboxIncluso.checked) {
+                                complementosInclusos.push({ produto: produto.nome, unidade: unidade + 1, complemento: comp });
+                                console.log(`Adicionado inclusos: ${comp} para ${produto.nome} #${unidade + 1}`);
+                            }
+                            
+                            if (checkboxDobro && checkboxDobro.checked) {
+                                complementosDobro.push({ produto: produto.nome, unidade: unidade + 1, complemento: comp });
+                                console.log(`Adicionado dobro: ${comp} para ${produto.nome} #${unidade + 1}`);
+                            }
+                        });
+                    }
                 });
                 
                 console.log('Complementos inclusos:', complementosInclusos);
